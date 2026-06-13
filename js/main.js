@@ -96,17 +96,24 @@ if (prefersReduced) {
 function heroIntro() {
   const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-  tl.from(".hero__img", { scale: 1.35, duration: 2, ease: "power3.out" }, 0)
-    .from(".hero__title-text", {
-      yPercent: 115, duration: 1.2, stagger: 0.12,
+  tl.to(".hero__img", { scale: 1, duration: 2, ease: "power3.out" }, 0)
+    .to(".hero__title-text", {
+      yPercent: 0, duration: 1.2, stagger: 0.12,
     }, 0.2)
-    .from(".hero__eyebrow span", { yPercent: 110, duration: 0.9 }, 0.5)
-    .from(".hero__tagline .line-inner", {
-      yPercent: 110, duration: 0.9, stagger: 0.08,
+    .to(".hero__eyebrow span", { yPercent: 0, duration: 0.9 }, 0.5)
+    .to(".hero__tagline .line-inner", {
+      yPercent: 0, duration: 0.9, stagger: 0.08,
     }, 0.7)
-    .from(".hero__scroll", { opacity: 0, y: 20, duration: 0.8 }, 1)
-    .from(".hero__badge", { opacity: 0, scale: 0.6, duration: 1, ease: "back.out(1.6)" }, 0.9)
-    .from(".nav", { yPercent: -110, duration: 0.9 }, 0.6);
+    .to(".hero__scroll", { opacity: 1, y: 0, duration: 0.8 }, 1)
+    .to(".hero__badge", { opacity: 1, scale: 1, duration: 1, ease: "back.out(1.6)" }, 0.9);
+
+  gsap.to(".nav", {
+    opacity: 1,
+    visibility: "visible",
+    duration: 0.7,
+    delay: 1.1,
+    ease: "power2.out",
+  });
 }
 
 // hero parallax on scroll
@@ -380,7 +387,129 @@ updateTime();
 setInterval(updateTime, 30000);
 
 /* ───────────────────────────────
-   13. REFRESH ON RESIZE / LOAD
+   13. CART SYSTEM
+─────────────────────────────── */
+const cart = [];
+const cartToggle = document.getElementById("cartToggle");
+const cartEl = document.getElementById("cart");
+const cartOverlay = document.getElementById("cartOverlay");
+const cartClose = document.getElementById("cartClose");
+const cartItems = document.getElementById("cartItems");
+const cartEmpty = document.getElementById("cartEmpty");
+const cartFooter = document.getElementById("cartFooter");
+const cartTotal = document.getElementById("cartTotal");
+const cartCount = document.getElementById("cartCount");
+const cartCheckout = document.getElementById("cartCheckout");
+
+function openCart() {
+  cartEl.classList.add("is-open");
+  cartOverlay.classList.add("is-open");
+}
+function closeCart() {
+  cartEl.classList.remove("is-open");
+  cartOverlay.classList.remove("is-open");
+}
+
+cartToggle.addEventListener("click", openCart);
+cartClose.addEventListener("click", closeCart);
+cartOverlay.addEventListener("click", closeCart);
+
+renderCart();
+
+function renderCart() {
+  cartItems.innerHTML = "";
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const count = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  cartCount.textContent = count;
+  cartCount.classList.add("bump");
+  setTimeout(() => cartCount.classList.remove("bump"), 300);
+
+  if (cart.length === 0) {
+    cartEmpty.style.display = "flex";
+    cartFooter.style.display = "none";
+  } else {
+    cartEmpty.style.display = "none";
+    cartFooter.style.display = "block";
+    cart.forEach((item, i) => {
+      const li = document.createElement("li");
+      li.className = "cart__item";
+      li.innerHTML = `
+        <div class="cart__item-info">
+          <div class="cart__item-name">${item.name}</div>
+          <div class="cart__item-price">₹ ${item.price} each</div>
+        </div>
+        <div class="cart__item-qty">
+          <button data-qty-dec="${i}">−</button>
+          <span>${item.qty}</span>
+          <button data-qty-inc="${i}">+</button>
+        </div>
+        <button class="cart__item-remove" data-remove="${i}">&times;</button>
+      `;
+      cartItems.appendChild(li);
+    });
+  }
+  cartTotal.textContent = `₹ ${total}`;
+}
+
+document.querySelectorAll(".menu__add").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const item = btn.closest(".menu__item");
+    const name = item.dataset.name;
+    const price = parseInt(item.dataset.price, 10);
+    const existing = cart.find((c) => c.name === name);
+
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+
+    btn.classList.add("added");
+    btn.textContent = `${cart.find(c => c.name === name).qty}x`;
+    setTimeout(() => {
+      btn.classList.remove("added");
+      btn.textContent = "Add";
+    }, 800);
+
+    renderCart();
+  });
+});
+
+cartItems.addEventListener("click", (e) => {
+  const incBtn = e.target.closest("[data-qty-inc]");
+  const decBtn = e.target.closest("[data-qty-dec]");
+  const removeBtn = e.target.closest("[data-remove]");
+
+  if (incBtn) {
+    const i = parseInt(incBtn.dataset.qtyInc, 10);
+    cart[i].qty++;
+    renderCart();
+  }
+  if (decBtn) {
+    const i = parseInt(decBtn.dataset.qtyDec, 10);
+    cart[i].qty--;
+    if (cart[i].qty <= 0) cart.splice(i, 1);
+    renderCart();
+  }
+  if (removeBtn) {
+    const i = parseInt(removeBtn.dataset.remove, 10);
+    cart.splice(i, 1);
+    renderCart();
+  }
+});
+
+cartCheckout.addEventListener("click", () => {
+  if (cart.length === 0) return;
+  const names = cart.map((c) => `${c.qty}x ${c.name}`).join(", ");
+  const msg = encodeURIComponent(
+    `Hi Navayuga! I'd like to order:\n${cart.map(c => `  ${c.qty}x ${c.name} — ₹${c.price * c.qty}`).join("\n")}\n\nTotal: ₹${cart.reduce((s, i) => s + i.price * i.qty, 0)}`
+  );
+  window.open(`https://wa.me/914000000000?text=${msg}`, "_blank");
+});
+
+/* ───────────────────────────────
+   14. REFRESH ON RESIZE / LOAD
 ─────────────────────────────── */
 window.addEventListener("load", () => {
   ScrollTrigger.refresh();

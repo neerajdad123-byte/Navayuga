@@ -47,6 +47,10 @@
     <a href="#visit" class="nav__cta magnetic" data-cursor="-sm">
       <span class="nav__cta-dot"></span> Reserve a Table
     </a>
+    <button class="nav__cart" id="cartToggle" data-cursor="-sm">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="nav__cart-count" id="cartCount">0</span>
+    </button>
   </header>
 
   <main id="main">
@@ -137,49 +141,54 @@
       </div>
 
       <ul class="menu__list">
-        <li class="menu__item" data-img="images/dish1.jpg" data-cursor="view">
+        <li class="menu__item" data-img="images/dish1.jpg" data-cursor="view" data-name="Nizami Haleem Royale" data-price="740">
           <span class="menu__num">01</span>
           <div class="menu__name-wrap">
             <h3 class="menu__name">Nizami Haleem Royale</h3>
             <p class="menu__desc">Eight-hour pounded lamb, bone-marrow ghee, crisped onion, mint</p>
           </div>
           <span class="menu__price">₹ 740</span>
+          <button class="menu__add" data-cursor="-sm">Add</button>
           <div class="menu__item-img"><img src="images/dish1.jpg" alt="Nizami Haleem Royale" /></div>
         </li>
-        <li class="menu__item" data-img="images/dish2.jpg" data-cursor="view">
+        <li class="menu__item" data-img="images/dish2.jpg" data-cursor="view" data-name="Charcoal Malai Tikka" data-price="690">
           <span class="menu__num">02</span>
           <div class="menu__name-wrap">
             <h3 class="menu__name">Charcoal Malai Tikka</h3>
             <p class="menu__desc">Smoked cream chicken, kasuri butter, charred lime, silver leaf</p>
           </div>
           <span class="menu__price">₹ 690</span>
+          <button class="menu__add" data-cursor="-sm">Add</button>
           <div class="menu__item-img"><img src="images/dish2.jpg" alt="Charcoal Malai Tikka" /></div>
         </li>
-        <li class="menu__item" data-img="images/dish3.jpg" data-cursor="view">
+        <li class="menu__item" data-img="images/dish3.jpg" data-cursor="view" data-name="Banarasi Chaat Theatre" data-price="520">
           <span class="menu__num">03</span>
           <div class="menu__name-wrap">
             <h3 class="menu__name">Banarasi Chaat Theatre</h3>
             <p class="menu__desc">Tamarind caviar, yogurt snow, pomegranate, sev clouds — built tableside</p>
           </div>
           <span class="menu__price">₹ 520</span>
+          <button class="menu__add" data-cursor="-sm">Add</button>
           <div class="menu__item-img"><img src="images/dish3.jpg" alt="Banarasi Chaat Theatre" /></div>
         </li>
-        <li class="menu__item" data-img="images/dish4.jpg" data-cursor="view">
+        <li class="menu__item" data-img="images/dish4.jpg" data-cursor="view" data-name="Dakshin Ghee Roast" data-price="880">
           <span class="menu__num">04</span>
           <div class="menu__name-wrap">
             <h3 class="menu__name">Dakshin Ghee Roast</h3>
             <p class="menu__desc">Mangalorean fire-paste prawns, curry-leaf oil, neer dosa veils</p>
           </div>
           <span class="menu__price">₹ 880</span>
+          <button class="menu__add" data-cursor="-sm">Add</button>
           <div class="menu__item-img"><img src="images/dish4.jpg" alt="Dakshin Ghee Roast" /></div>
         </li>
-        <li class="menu__item" data-img="images/thali.jpg" data-cursor="view">
+        <li class="menu__item" data-img="images/thali.jpg" data-cursor="view" data-name="The Navayuga Thali" data-price="1450">
           <span class="menu__num">05</span>
           <div class="menu__name-wrap">
             <h3 class="menu__name">The Navayuga Thali</h3>
             <p class="menu__desc">Eleven small acts from across the subcontinent — the whole story, one plate</p>
           </div>
           <span class="menu__price">₹ 1,450</span>
+          <button class="menu__add" data-cursor="-sm">Add</button>
           <div class="menu__item-img"><img src="images/thali.jpg" alt="The Navayuga Thali" /></div>
         </li>
       </ul>
@@ -245,6 +254,24 @@
     </section>
 
   </main>
+
+  <!-- ════════ CART SIDEBAR ════════ -->
+  <aside class="cart-overlay" id="cartOverlay"></aside>
+  <aside class="cart" id="cart">
+    <div class="cart__header">
+      <h3 class="cart__title">Your Order</h3>
+      <button class="cart__close" id="cartClose">&times;</button>
+    </div>
+    <ul class="cart__items" id="cartItems"></ul>
+    <div class="cart__empty" id="cartEmpty">Your cart is empty.</div>
+    <div class="cart__footer" id="cartFooter">
+      <div class="cart__total">
+        <span>Total</span>
+        <span id="cartTotal">₹ 0</span>
+      </div>
+      <button class="cart__checkout" id="cartCheckout">Place Order</button>
+    </div>
+  </aside>
 
   <!-- ════════ FOOTER ════════ -->
   <footer class="footer">
