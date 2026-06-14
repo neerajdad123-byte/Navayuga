@@ -312,10 +312,11 @@ const menuFloat = document.getElementById("menuFloat");
 const menuFloatImg = menuFloat.querySelector("img");
 const menuItems = document.querySelectorAll(".menu__item");
 
+let floatPos = { x: 0, y: 0 };
+let floatMouse = { x: 0, y: 0 };
+let floatActive = false;
+
 if (!isTouch) {
-  const floatPos = { x: 0, y: 0 };
-  const floatMouse = { x: 0, y: 0 };
-  let floatActive = false;
 
   window.addEventListener("mousemove", (e) => {
     floatMouse.x = e.clientX;
@@ -326,7 +327,7 @@ if (!isTouch) {
     if (!floatActive) return;
     floatPos.x += (floatMouse.x - floatPos.x) * 0.1;
     floatPos.y += (floatMouse.y - floatPos.y) * 0.1;
-    gsap.set(menuFloat, { left: floatPos.x, top: floatPos.y });
+    gsap.set(menuFloat, { left: floatPos.x + 170, top: floatPos.y + 100 });
   });
 
   menuItems.forEach((item) => {
@@ -334,8 +335,8 @@ if (!isTouch) {
       menuFloatImg.src = item.dataset.img;
       floatActive = true;
       // snap position so it doesn't fly across the screen
-      floatPos.x = floatMouse.x;
-      floatPos.y = floatMouse.y;
+      floatPos.x = floatMouse.x + 170;
+      floatPos.y = floatMouse.y + 100;
       gsap.to(menuFloat, {
         opacity: 1,
         scale: 1,
@@ -509,7 +510,187 @@ cartCheckout.addEventListener("click", () => {
 });
 
 /* ───────────────────────────────
-   14. REFRESH ON RESIZE / LOAD
+   14. USER INFO POPUP
+─────────────────────────────── */
+const userPopupOverlay = document.getElementById("userPopupOverlay");
+const userPopup = document.getElementById("userPopup");
+const userPopupForm = document.getElementById("userPopupForm");
+const popupSkip = document.getElementById("popupSkip");
+
+const STORAGE_USER = "navayuga_user_info";
+
+if (sessionStorage.getItem("navayuga_popup_seen") || localStorage.getItem(STORAGE_USER)) {
+  // already submitted or skipped this session
+} else {
+  setTimeout(() => {
+    userPopupOverlay.classList.add("is-open");
+    userPopup.classList.add("is-open");
+  }, 4000);
+}
+
+function closePopup() {
+  userPopupOverlay.classList.remove("is-open");
+  userPopup.classList.remove("is-open");
+  sessionStorage.setItem("navayuga_popup_seen", "1");
+}
+
+userPopupForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("popupName").value.trim();
+  const whatsapp = document.getElementById("popupWhatsapp").value.trim();
+  const birthday = document.getElementById("popupBirthday").value;
+  if (!name) return;
+
+  const userData = { name, whatsapp, birthday, time: new Date().toLocaleString("en-IN") };
+  localStorage.setItem(STORAGE_USER, JSON.stringify(userData));
+
+  // also append to users array for admin
+  const STORAGE_USERS = "navayuga_users";
+  const users = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; } catch (e) { return []; } })();
+  users.push(userData);
+  localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+
+  closePopup();
+});
+
+popupSkip.addEventListener("click", closePopup);
+
+/* ───────────────────────────────
+   15. DYNAMIC MENU + SPECIAL OF THE DAY
+─────────────────────────────── */
+const STORAGE_MENU = "navayuga_menu";
+const STORAGE_SPECIAL = "navayuga_special";
+
+const DEFAULT_MENU = [
+  { name: "Nizami Haleem Royale", desc: "Eight-hour pounded lamb, bone-marrow ghee, crisped onion, mint", price: 740, img: "images/dish1.jpg" },
+  { name: "Charcoal Malai Tikka", desc: "Smoked cream chicken, kasuri butter, charred lime, silver leaf", price: 690, img: "images/dish2.jpg" },
+  { name: "Banarasi Chaat Theatre", desc: "Tamarind caviar, yogurt snow, pomegranate, sev clouds — built tableside", price: 520, img: "images/dish3.jpg" },
+  { name: "Dakshin Ghee Roast", desc: "Mangalorean fire-paste prawns, curry-leaf oil, neer dosa veils", price: 880, img: "images/dish4.jpg" },
+  { name: "The Navayuga Thali", desc: "Eleven small acts from across the subcontinent — the whole story, one plate", price: 1450, img: "images/thali.jpg" },
+];
+
+function loadMenu() {
+  try {
+    const data = localStorage.getItem(STORAGE_MENU);
+    if (data) { const parsed = JSON.parse(data); if (parsed.length > 0) return parsed; }
+  } catch (e) {}
+  return structuredClone(DEFAULT_MENU);
+}
+
+function loadSpecial() {
+  try {
+    const data = localStorage.getItem(STORAGE_SPECIAL);
+    if (data) return JSON.parse(data);
+  } catch (e) {}
+  return { name: "", desc: "", price: "", img: "", active: false };
+}
+
+/* render menu dynamically if admin has customized it */
+function syncMenu() {
+  const menu = loadMenu();
+  const menuList = document.querySelector(".menu__list");
+  if (!menuList) return;
+
+  menuList.innerHTML = "";
+  menu.forEach((item, i) => {
+    const li = document.createElement("li");
+    li.className = "menu__item";
+    li.dataset.img = item.img;
+    li.dataset.cursor = "view";
+    li.dataset.name = item.name;
+    li.dataset.price = item.price;
+    li.innerHTML = `
+      <span class="menu__num">${String(i + 1).padStart(2, "0")}</span>
+      <div class="menu__name-wrap">
+        <h3 class="menu__name">${item.name}</h3>
+        <p class="menu__desc">${item.desc}</p>
+      </div>
+      <span class="menu__price">₹ ${item.price}</span>
+      <button class="menu__add" data-cursor="-sm">Add</button>
+      <div class="menu__item-img"><img src="${item.img}" alt="${item.name}" /></div>
+    `;
+    menuList.appendChild(li);
+  });
+
+  // reattach cart listeners
+  document.querySelectorAll(".menu__add").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = btn.closest(".menu__item");
+      const name = item.dataset.name;
+      const price = parseInt(item.dataset.price, 10);
+      const existing = cart.find((c) => c.name === name);
+      if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1 }); }
+      btn.classList.add("added");
+      btn.textContent = `${cart.find(c => c.name === name).qty}x`;
+      setTimeout(() => { btn.classList.remove("added"); btn.textContent = "Add"; }, 800);
+      renderCart();
+    });
+  });
+
+  // reattach menu floating image listeners
+  const menuItems = document.querySelectorAll(".menu__item");
+  if (!isTouch) {
+    menuItems.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        menuFloatImg.src = item.dataset.img;
+        floatActive = true;
+        floatPos.x = floatMouse.x + 170;
+        floatPos.y = floatMouse.y + 100;
+        gsap.to(menuFloat, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out", overwrite: true });
+      });
+      item.addEventListener("mouseleave", () => {
+        floatActive = false;
+        gsap.to(menuFloat, { opacity: 0, scale: 0.85, duration: 0.4, ease: "power3.in", overwrite: true });
+      });
+    });
+  } else {
+    menuItems.forEach((item) => {
+      const wrap = document.createElement("div");
+      wrap.className = "menu__item-img";
+      const img = document.createElement("img");
+      img.src = item.dataset.img;
+      img.alt = item.querySelector(".menu__name").textContent;
+      img.loading = "lazy";
+      wrap.appendChild(img);
+      item.appendChild(wrap);
+    });
+  }
+}
+
+/* render special of the day */
+function syncSpecial() {
+  const s = loadSpecial();
+  const existing = document.getElementById("specialSection");
+  if (existing) existing.remove();
+
+  if (!s.active || !s.name) return;
+
+  const section = document.createElement("section");
+  section.id = "specialSection";
+  section.className = "special";
+  section.innerHTML = `
+    <div class="special__ribbon">✦ Special of the Day ✦</div>
+    <div class="special__inner">
+      ${s.img ? `<div class="special__img"><img src="${s.img}" alt="${s.name}" /></div>` : ""}
+      <div class="special__info">
+        <h2 class="special__name">${s.name}</h2>
+        <p class="special__desc">${s.desc}</p>
+        <span class="special__price">₹ ${s.price}</span>
+      </div>
+    </div>
+  `;
+
+  const storySection = document.getElementById("story");
+  if (storySection) {
+    storySection.parentNode.insertBefore(section, storySection);
+  }
+}
+
+syncMenu();
+syncSpecial();
+
+/* ───────────────────────────────
+   16. REFRESH ON RESIZE / LOAD
 ─────────────────────────────── */
 window.addEventListener("load", () => {
   ScrollTrigger.refresh();

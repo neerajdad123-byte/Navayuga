@@ -273,6 +273,22 @@
     </div>
   </aside>
 
+  <!-- ════════ USER INFO POPUP ════════ -->
+  <div class="user-popup-overlay" id="userPopupOverlay"></div>
+  <div class="user-popup" id="userPopup">
+    <div class="user-popup__card">
+      <h3 class="user-popup__title">Welcome to Navayuga</h3>
+      <p class="user-popup__sub">Tell us about yourself for a more personal experience.</p>
+      <form class="user-popup__form" id="userPopupForm">
+        <input type="text" id="popupName" placeholder="Your Name" required />
+        <input type="tel" id="popupWhatsapp" placeholder="WhatsApp Number (optional)" />
+        <input type="date" id="popupBirthday" />
+        <button type="submit">Continue</button>
+      </form>
+      <button class="user-popup__skip" id="popupSkip">Skip for now</button>
+    </div>
+  </div>
+
   <!-- ════════ FOOTER ════════ -->
   <footer class="footer">
     <div class="footer__top">

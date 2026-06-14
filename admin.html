@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Navayuga — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="admin-login" id="adminLogin">
+    <div class="admin-login__card">
+      <h1 class="admin-login__title">ॐ Navayuga</h1>
+      <p class="admin-login__sub">Admin Panel</p>
+      <form class="admin-login__form" id="loginForm">
+        <input type="password" id="loginPassword" class="admin-login__input" placeholder="Password" autocomplete="current-password" />
+        <button type="submit" class="admin-login__btn">Enter</button>
+        <p class="admin-login__error" id="loginError"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="admin-dash" id="adminDash" style="display:none">
+    <header class="admin-dash__head">
+      <h2>Navayuga Admin</h2>
+      <button class="admin-dash__logout" id="btnLogout">Logout</button>
+    </header>
+
+    <nav class="admin-tabs">
+      <button class="admin-tabs__btn active" data-tab="menu">Menu</button>
+      <button class="admin-tabs__btn" data-tab="special">Special of the Day</button>
+      <button class="admin-tabs__btn" data-tab="users">Users</button>
+      <button class="admin-tabs__btn" data-tab="settings">Settings</button>
+    </nav>
+
+    <!-- MENU TAB -->
+    <section class="admin-panel active" id="tab-menu">
+      <div class="admin-panel__head">
+        <h3>Menu Items</h3>
+        <button class="admin-btn admin-btn--add" id="btnAddItem">+ Add Item</button>
+      </div>
+      <div class="admin-list" id="menuList"></div>
+    </section>
+
+    <!-- SPECIAL TAB -->
+    <section class="admin-panel" id="tab-special">
+      <h3>Special Item of the Day</h3>
+      <form class="admin-form" id="specialForm">
+        <div class="admin-form__row">
+          <label>Dish Name</label>
+          <input type="text" id="specialName" placeholder="e.g. Sunday Lamb Biryani" />
+        </div>
+        <div class="admin-form__row">
+          <label>Description</label>
+          <input type="text" id="specialDesc" placeholder="e.g. Slow-cooked with saffron and rose water" />
+        </div>
+        <div class="admin-form__row">
+          <label>Price (₹)</label>
+          <input type="number" id="specialPrice" placeholder="1290" />
+        </div>
+        <div class="admin-form__row">
+          <label>Image URL (optional)</label>
+          <input type="text" id="specialImg" placeholder="images/dish1.jpg" />
+        </div>
+        <div class="admin-form__row">
+          <label>
+            <input type="checkbox" id="specialActive" /> Active
+          </label>
+        </div>
+        <button type="submit" class="admin-btn admin-btn--save">Save Special</button>
+      </form>
+    </section>
+
+    <!-- USERS TAB -->
+    <section class="admin-panel" id="tab-users">
+      <h3>User Submissions</h3>
+      <div class="admin-list" id="userList"></div>
+    </section>
+
+    <!-- SETTINGS TAB -->
+    <section class="admin-panel" id="tab-settings">
+      <h3>Change Password</h3>
+      <form class="admin-form" id="passwordForm">
+        <div class="admin-form__row">
+          <label>Current Password</label>
+          <input type="password" id="currentPassword" />
+        </div>
+        <div class="admin-form__row">
+          <label>New Password</label>
+          <input type="password" id="newPassword" />
+        </div>
+        <button type="submit" class="admin-btn admin-btn--save">Update Password</button>
+        <p class="admin-form__msg" id="passwordMsg"></p>
+      </form>
+    </section>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="admin-modal" id="editModal">
+    <div class="admin-modal__card">
+      <div class="admin-modal__head">
+        <h4 id="editTitle">Edit Item</h4>
+        <button class="admin-modal__close" id="modalClose">&times;</button>
+      </div>
+      <form class="admin-form" id="editForm">
+        <input type="hidden" id="editIndex" />
+        <div class="admin-form__row">
+          <label>Dish Name</label>
+          <input type="text" id="editName" />
+        </div>
+        <div class="admin-form__row">
+          <label>Description</label>
+          <input type="text" id="editDesc" />
+        </div>
+        <div class="admin-form__row">
+          <label>Price (₹)</label>
+          <input type="number" id="editPrice" />
+        </div>
+        <div class="admin-form__row">
+          <label>Image</label>
+          <input type="text" id="editImg" />
+        </div>
+        <button type="submit" class="admin-btn admin-btn--save">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
