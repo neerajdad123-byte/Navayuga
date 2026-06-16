@@ -1,4 +1,4 @@
-/* ═══ NAVAYUGA ADMIN — admin.css ═══ */
+/* ═══ LUCKY'S BIRIYANIHOUSE ADMIN — admin.css ═══ */
 :root {
   --bg: #0e0b09;
   --bg-2: #161210;
@@ -228,6 +228,11 @@ input, button { font-family: inherit; }
   transition: border-color 0.3s;
 }
 .admin-form__row input:focus { border-color: var(--saffron); }
+.admin-form__row input[type="file"] {
+  color: var(--cream-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
 .admin-form__msg {
   font-size: 0.78rem;
   min-height: 1.2rem;
