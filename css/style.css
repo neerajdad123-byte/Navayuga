@@ -285,7 +285,7 @@ em { font-family: var(--serif); font-style: italic; }
   animation: spin 18s linear infinite;
 }
 .hero__badge-svg text {
-  fill: var(--cream);
+  fill: #ffffff;
   font-size: 13.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
