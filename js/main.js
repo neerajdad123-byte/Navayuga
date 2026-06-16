@@ -504,7 +504,7 @@ cartCheckout.addEventListener("click", () => {
   if (cart.length === 0) return;
   const names = cart.map((c) => `${c.qty}x ${c.name}`).join(", ");
   const msg = encodeURIComponent(
-    `Hi Navayuga! I'd like to order:\n${cart.map(c => `  ${c.qty}x ${c.name} — ₹${c.price * c.qty}`).join("\n")}\n\nTotal: ₹${cart.reduce((s, i) => s + i.price * i.qty, 0)}`
+    `Hi Lucky's Biriyanihouse! I'd like to order:\n${cart.map(c => `  ${c.qty}x ${c.name} — ₹${c.price * c.qty}`).join("\n")}\n\nTotal: ₹${cart.reduce((s, i) => s + i.price * i.qty, 0)}`
   );
   window.open(`https://wa.me/914000000000?text=${msg}`, "_blank");
 });
@@ -566,7 +566,7 @@ const DEFAULT_MENU = [
   { name: "Charcoal Malai Tikka", desc: "Smoked cream chicken, kasuri butter, charred lime, silver leaf", price: 690, img: "images/dish2.jpg" },
   { name: "Banarasi Chaat Theatre", desc: "Tamarind caviar, yogurt snow, pomegranate, sev clouds — built tableside", price: 520, img: "images/dish3.jpg" },
   { name: "Dakshin Ghee Roast", desc: "Mangalorean fire-paste prawns, curry-leaf oil, neer dosa veils", price: 880, img: "images/dish4.jpg" },
-  { name: "The Navayuga Thali", desc: "Eleven small acts from across the subcontinent — the whole story, one plate", price: 1450, img: "images/thali.jpg" },
+  { name: "The Lucky's Special Thali", desc: "Eleven small acts from across the subcontinent — the whole story, one plate", price: 1450, img: "images/thali.jpg" },
 ];
 
 function loadMenu() {

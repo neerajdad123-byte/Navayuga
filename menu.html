@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUCKY'S BIRIYANIHOUSE — Menu</title>
+  <meta name="description" content="Full menu at Lucky's biriyanihouse. Biryani, starters, curries, tandoori, and more." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════
+       LUCKY'S BIRIYANIHOUSE MENU PAGE — Light Theme
+       ═══════════════════════════════════════════ */
+    :root {
+      --bg: #faf6f0;
+      --bg-2: #f0ebe3;
+      --bg-3: #e8e0d5;
+      --cream: #1a1612;
+      --cream-dim: rgba(26, 22, 18, 0.55);
+      --saffron: #c47a1a;
+      --saffron-light: #e8a33d;
+      --rust: #a03020;
+      --line: rgba(26, 22, 18, 0.12);
+      --serif: "Fraunces", serif;
+      --sans: "Space Grotesk", sans-serif;
+      --ease: cubic-bezier(0.65, 0.05, 0, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: auto;
+    }
+
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a { color: inherit; text-decoration: none; cursor: pointer; }
+    ul { list-style: none; }
+    em { font-family: var(--serif); font-style: italic; }
+
+    ::selection { background: var(--saffron); color: var(--bg); }
+
+    /* ═══════════════ NAV ═══════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem 2.5rem;
+      background: rgba(250, 246, 240, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      transition: transform 0.6s var(--ease), opacity 0.5s var(--ease);
+    }
+    .nav.is-hidden { transform: translateY(-110%); }
+    .nav__logo {
+      font-family: var(--serif); font-weight: 500;
+      letter-spacing: 0.25em; font-size: 0.95rem;
+      color: var(--cream);
+    }
+    .nav__logo-mark { color: var(--saffron); margin-right: 0.3rem; }
+    .nav__links { display: flex; gap: 2.2rem; }
+    .nav__link {
+      font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--cream-dim);
+      position: relative;
+      transition: color 0.35s;
+    }
+    .nav__link:hover { color: var(--saffron); }
+    .nav__link::after {
+      content: "";
+      position: absolute; left: 0; bottom: -4px;
+      width: 100%; height: 1px;
+      background: var(--saffron);
+      transform: scaleX(0); transform-origin: right;
+      transition: transform 0.45s var(--ease);
+    }
+    .nav__link:hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav__link.active { color: var(--saffron); }
+    .nav__link.active::after { transform: scaleX(1); }
+
+    .nav__cta {
+      display: flex; align-items: center; gap: 0.55rem;
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      border: 1px solid var(--line); border-radius: 99px;
+      padding: 0.65rem 1.3rem;
+      color: var(--cream);
+      transition: background 0.4s, color 0.4s, border-color 0.4s;
+    }
+    .nav__cta:hover { background: var(--saffron); color: var(--bg); border-color: var(--saffron); }
+    .nav__cta-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--saffron);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.6); opacity: 0.5; }
+    }
+
+    @media (max-width: 860px) {
+      .nav__links { display: none; }
+    }
+
+    /* ═══════════════ PAGE HEADER ═══════════════ */
+    .page-header {
+      padding: 10rem 2.5rem 4rem;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .page-header__label {
+      display: inline-block;
+      font-size: 0.78rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--saffron);
+      margin-bottom: 1.5rem;
+    }
+    .page-header__title {
+      font-family: var(--serif); font-weight: 300;
+      font-size: clamp(3rem, 10vw, 7rem);
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .page-header__title em { color: var(--saffron); font-style: italic; }
+    .page-header__desc {
+      max-width: 36rem;
+      margin: 0 auto;
+      font-size: 1.05rem; line-height: 1.7; color: var(--cream-dim);
+    }
+
+    /* ═══════════════ MENU SECTIONS ═══════════════ */
+    .menu-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 8rem;
+    }
+
+    .menu-section {
+      margin-bottom: 4rem;
+    }
+    .menu-section__header {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--saffron);
+    }
+    .menu-section__icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--saffron);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--bg);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .menu-section__title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      color: var(--cream);
+    }
+    .menu-section__count {
+      margin-left: auto;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--cream-dim);
+    }
+
+    /* ═══════════════ ITEM ROWS ═══════════════ */
+    .menu-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.3s, padding-left 0.3s;
+    }
+    .menu-row:hover {
+      background: rgba(196, 122, 26, 0.04);
+      padding-left: 1rem;
+      margin-left: -1rem;
+      padding-right: 1rem;
+      margin-right: -1rem;
+      border-radius: 8px;
+    }
+    .menu-row__info { min-width: 0; }
+    .menu-row__name {
+      font-family: var(--serif); font-weight: 400;
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+    }
+    .menu-row__desc {
+      font-size: 0.85rem; color: var(--cream-dim); line-height: 1.5;
+    }
+    .menu-row__price {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--saffron);
+      white-space: nowrap;
+      text-align: right;
+    }
+    .menu-row__price--slash {
+      text-decoration: line-through;
+      color: var(--cream-dim);
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+    }
+
+    /* ═══════════════ ITEM WITH PHOTO ═══════════════ */
+    .menu-row--photo {
+      grid-template-columns: 80px 1fr auto;
+      gap: 1.2rem;
+    }
+    .menu-row__thumb {
+      width: 80px; height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid var(--line);
+    }
+    .menu-row__thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease);
+    }
+    .menu-row:hover .menu-row__thumb img { transform: scale(1.08); }
+
+    /* ═══════════════ SUB-SECTION LABELS ═══════════════ */
+    .menu-sub {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin: 2rem 0 1rem;
+    }
+    .menu-sub__line {
+      flex: 1; height: 1px;
+      background: var(--line);
+    }
+    .menu-sub__text {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--saffron);
+      white-space: nowrap;
+    }
+
+    /* ═══════════════ FOOTER ═══════════════ */
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 3rem 2.5rem 0;
+      overflow: hidden;
+      background: var(--bg-2);
+    }
+    .footer__top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 2rem; flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .footer__links { display: flex; gap: 1.8rem; }
+    .footer__link {
+      font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cream-dim);
+      position: relative;
+      transition: color 0.35s;
+    }
+    .footer__link::after {
+      content: "";
+      position: absolute; left: 0; bottom: -4px;
+      width: 100%; height: 1px;
+      background: var(--saffron);
+      transform: scaleX(0); transform-origin: right;
+      transition: transform 0.45s var(--ease);
+    }
+    .footer__link:hover { color: var(--cream); }
+    .footer__link:hover::after { transform: scaleX(1); transform-origin: left; }
+    .footer__meta {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 0.5rem;
+      font-size: 0.8rem; letter-spacing: 0.08em;
+      color: var(--cream-dim);
+    }
+    #localTime { color: var(--saffron); }
+
+    .footer__logo-wrap { overflow: hidden; }
+    .footer__logo {
+      font-family: var(--serif); font-weight: 300;
+      font-size: clamp(4rem, 16.5vw, 16rem);
+      line-height: 0.95;
+      text-align: center;
+      letter-spacing: 0.02em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(26, 22, 18, 0.2);
+      transform: translateY(20%);
+      transition: color 0.8s var(--ease), transform 0.8s var(--ease);
+    }
+    .footer__logo-wrap:hover .footer__logo {
+      color: var(--saffron);
+      -webkit-text-stroke: 1px var(--saffron);
+      transform: translateY(10%);
+    }
+
+    /* ═══════════════ SCROLL TO TOP ═══════════════ */
+    .scroll-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--saffron);
+      color: var(--bg);
+      border: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 90;
+    }
+    .scroll-top.visible { opacity: 1; transform: translateY(0); }
+    .scroll-top:hover { background: var(--saffron-light); }
+
+    /* ═══════════════ MARQUEE ═══════════════ */
+    .marquee {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 1.4rem 0;
+      background: var(--bg-2);
+    }
+    .marquee__track {
+      display: flex; width: max-content;
+      will-change: transform;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee__item {
+      font-family: var(--serif); font-weight: 300;
+      font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+      white-space: nowrap;
+      color: var(--cream-dim);
+    }
+    .marquee__item em {
+      color: var(--saffron); font-style: normal;
+      font-size: 0.7em; vertical-align: middle;
+      margin: 0 0.6rem;
+    }
+    @keyframes marquee { to { transform: translateX(-33.333%); } }
+
+    /* ═══════════════ RESPONSIVE ═══════════════ */
+    @media (max-width: 700px) {
+      .nav { padding: 1.2rem 1.4rem; }
+      .page-header { padding: 8rem 1.4rem 3rem; }
+      .menu-page { padding: 2rem 1.4rem 6rem; }
+      .menu-row { grid-template-columns: 1fr; gap: 0.5rem; }
+      .menu-row__price { text-align: left; }
+      .menu-row--photo { grid-template-columns: 60px 1fr; }
+      .menu-row__thumb { width: 60px; height: 60px; }
+      .menu-row__price { grid-column: 2; }
+      .footer { padding-inline: 1.4rem; }
+      .footer__meta { align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001s !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════ NAVIGATION ════════ -->
+  <header class="nav" id="nav">
+    <a href="index.html" class="nav__logo">
+      <span class="nav__logo-mark">🍛</span> LUCKY'S BIRIYANIHOUSE
+    </a>
+    <nav class="nav__links">
+      <a href="index.html#story" class="nav__link">Story</a>
+      <a href="menu.html" class="nav__link active">Menu</a>
+      <a href="index.html#gallery" class="nav__link">Gallery</a>
+      <a href="index.html#visit" class="nav__link">Visit</a>
+    </nav>
+    <a href="index.html#visit" class="nav__cta">
+      <span class="nav__cta-dot"></span> Reserve a Table
+    </a>
+  </header>
+
+  <!-- ════════ PAGE HEADER ════════ -->
+  <header class="page-header">
+    <span class="page-header__label">The Complete Menu</span>
+    <h1 class="page-header__title">Our <em>Flavours</em></h1>
+    <p class="page-header__desc">
+      From the slow-cooked biryani pots of Hyderabad to the tandoor fires of the North — every dish is a story.
+    </p>
+  </header>
+
+  <!-- ════════ MARQUEE ════════ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span class="marquee__item">Biryani <em>✦</em> Starters <em>✦</em> Curries <em>✦</em> Tandoori <em>✦</em> Rice <em>✦</em> Rotis <em>✦</em>&nbsp;</span>
+      <span class="marquee__item">Biryani <em>✦</em> Starters <em>✦</em> Curries <em>✦</em> Tandoori <em>✦</em> Rice <em>✦</em> Rotis <em>✦</em>&nbsp;</span>
+      <span class="marquee__item">Biryani <em>✦</em> Starters <em>✦</em> Curries <em>✦</em> Tandoori <em>✦</em> Rice <em>✦</em> Rotis <em>✦</em>&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ════════ MENU CONTENT ════════ -->
+  <main class="menu-page">
+
+    <!-- MUTTON BIRYANI -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🐑</div>
+        <h2 class="menu-section__title">Mutton Biryani</h2>
+        <span class="menu-section__count">5 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Biryani Single</div>
+          <div class="menu-row__desc">A generous single portion of slow-cooked mutton and fragrant basmati</div>
+        </div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Biryani Full</div>
+          <div class="menu-row__desc">Full plate — two pieces of tender mutton, sealed with dough and baked</div>
+        </div>
+        <div class="menu-row__price">₹380</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Biryani Double Ghosh</div>
+          <div class="menu-row__desc">Double the meat, double the joy — four pieces of premium mutton</div>
+        </div>
+        <div class="menu-row__price">₹520</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Biryani Family Pack (4)</div>
+          <div class="menu-row__desc">Serves four — the perfect gathering of family around the biryani pot</div>
+        </div>
+        <div class="menu-row__price">₹800</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Biryani Jumbo Pack (5)</div>
+          <div class="menu-row__desc">The feast size — five generous portions for the true biryani lover</div>
+        </div>
+        <div class="menu-row__price">₹1100</div>
+      </div>
+    </section>
+
+    <!-- SPECIAL MUTTON -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🌟</div>
+        <h2 class="menu-section__title">Special Mutton</h2>
+        <span class="menu-section__count">4 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Fry Piece Biryani</div>
+          <div class="menu-row__desc">Crispy fried mutton pieces layered with aromatic rice and caramelised onions</div>
+        </div>
+        <div class="menu-row__price">₹450</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Moghlai Biryani</div>
+          <div class="menu-row__desc">Royal Mughal recipe — saffron, dry fruits, and slow-braised mutton</div>
+        </div>
+        <div class="menu-row__price">₹480</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Kheema Biryani</div>
+          <div class="menu-row__desc">Minced mutton cooked with whole spices, layered with long-grain basmati</div>
+        </div>
+        <div class="menu-row__price">₹550</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mutton Nallighosh Biryani</div>
+          <div class="menu-row__desc">Hyderabadi specialty — tender lamb shanks falling off the bone</div>
+        </div>
+        <div class="menu-row__price">₹600</div>
+      </div>
+    </section>
+
+    <!-- CHICKEN BIRYANI -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🍗</div>
+        <h2 class="menu-section__title">Chicken Biryani</h2>
+        <span class="menu-section__count">5 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Biryani Single</div>
+          <div class="menu-row__desc">One piece of juicy chicken, perfectly spiced for a solo indulgence</div>
+        </div>
+        <div class="menu-row__price">₹160</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Biryani Full</div>
+          <div class="menu-row__desc">Two pieces of chicken, sealed and slow-cooked in the traditional dum style</div>
+        </div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Extra Piece</div>
+          <div class="menu-row__desc">Add an extra piece of our signature chicken to any biryani</div>
+        </div>
+        <div class="menu-row__price">₹60</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Biryani Family Pack</div>
+          <div class="menu-row__desc">Serves four — share the love, share the biryani</div>
+        </div>
+        <div class="menu-row__price">₹600</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Biryani Jumbo Pack (5)</div>
+          <div class="menu-row__desc">Five full portions — for when the whole gang is hungry</div>
+        </div>
+        <div class="menu-row__price">₹750</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Egg Biryani</div>
+          <div class="menu-row__desc">Boiled eggs nestled in spiced rice — simple, satisfying, sublime</div>
+        </div>
+        <div class="menu-row__price">₹200</div>
+      </div>
+    </section>
+
+    <!-- SPECIAL CHICKEN BIRYANI -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🔥</div>
+        <h2 class="menu-section__title">Special Chicken Biryani</h2>
+        <span class="menu-section__count">5 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken 65 Biryani</div>
+          <div class="menu-row__desc">Spicy Chicken 65 pieces tossed with biryani rice — half or full</div>
+        </div>
+        <div class="menu-row__price">₹180 / ₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Boneless Biryani</div>
+          <div class="menu-row__desc">Tender boneless chicken chunks, marinated and layered with saffron rice</div>
+        </div>
+        <div class="menu-row__price">₹220 / ₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Fry Piece Biryani</div>
+          <div class="menu-row__desc">Crispy fried chicken pieces with aromatic rice and raita — half or full</div>
+        </div>
+        <div class="menu-row__price">₹200 / ₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Lollipop Biryani</div>
+          <div class="menu-row__desc">Chicken lollipops perched on a bed of spiced biryani rice</div>
+        </div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Chicken Moghlai Biryani</div>
+          <div class="menu-row__desc">Mughal-inspired — dry fruits, cream, and saffron with tender chicken</div>
+        </div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+    </section>
+
+    <!-- SEA FOOD BIRYANI -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🦐</div>
+        <h2 class="menu-section__title">Sea Food Biryani</h2>
+        <span class="menu-section__count">3 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Fish Biryani</div>
+          <div class="menu-row__desc">Fresh catch of the day, marinated in coastal spices and layered with rice</div>
+        </div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Prawns Biryani</div>
+          <div class="menu-row__desc">Juicy prawns in a fragrant masala, slow-cooked with basmati</div>
+        </div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">MLA Potlam Biryani</div>
+          <div class="menu-row__desc">The politician's favourite — mutton, chicken, and prawns in one grand potlam</div>
+        </div>
+        <div class="menu-row__price">₹480</div>
+      </div>
+    </section>
+
+    <!-- VEG BIRYANI -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🥬</div>
+        <h2 class="menu-section__title">Veg Biryani</h2>
+        <span class="menu-section__count">6 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Veg Biryani</div>
+          <div class="menu-row__desc">Garden-fresh vegetables, slow-cooked with whole spices and basmati</div>
+        </div>
+        <div class="menu-row__price">₹200</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Veg Manchurian Biryani</div>
+          <div class="menu-row__desc">Indo-Chinese fusion — crispy Manchurian balls meet biryani rice</div>
+        </div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Veg Paneer Biryani</div>
+          <div class="menu-row__desc">Soft paneer cubes in spiced rice — a vegetarian's delight</div>
+        </div>
+        <div class="menu-row__price">₹260</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Veg Mushroom Biryani</div>
+          <div class="menu-row__desc">Earthy mushrooms and aromatic rice, a match made in heaven</div>
+        </div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Kaju Biryani</div>
+          <div class="menu-row__desc">Rich cashew nuts and vegetables in a creamy, spiced rice preparation</div>
+        </div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info">
+          <div class="menu-row__name">Mixed Veg Biryani</div>
+          <div class="menu-row__desc">The best of the garden — mixed vegetables in a festive biryani</div>
+        </div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+    </section>
+
+    <!-- NON VEG STARTERS -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🍖</div>
+        <h2 class="menu-section__title">Non Veg Starters</h2>
+        <span class="menu-section__count">19 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken 65</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Manchuria</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chilli Chicken</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Drumsticks</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Drums of Heaven</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Lollipop</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Pepper Chicken</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Majestic</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken 555</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Lemon Chicken</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Cashew Chicken</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Schezwan Chicken</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Ginger Chicken</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Garlic Chicken</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Hongkong</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Hunan Chicken</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken 8 To 8</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Honey Chilli Chicken</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Dragon Chicken</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Rampuri</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Apollo Chicken</div></div>
+        <div class="menu-row__price">₹340</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Sholay Chicken</div></div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Bangla Kodi Chips</div></div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Lucky's Special Chicken</div></div>
+        <div class="menu-row__price">₹380</div>
+      </div>
+    </section>
+
+    <!-- ADDITIONAL NON VEG STARTERS -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🌶️</div>
+        <h2 class="menu-section__title">Additional Non Veg Starters</h2>
+        <span class="menu-section__count">10 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mutton 65</div></div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mutton Chilli</div></div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Pepper Mutton</div></div>
+        <div class="menu-row__price">₹380</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mutton Kheema Balls</div></div>
+        <div class="menu-row__price">₹430</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chilli Fish</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Apollo Fish</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Pepper Fish</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Fish Fingers</div></div>
+        <div class="menu-row__price">₹340</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Fish 65</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chilli Prawns</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Loose Prawns</div></div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Egg Chilli</div></div>
+        <div class="menu-row__price">₹160</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Egg 65</div></div>
+        <div class="menu-row__price">₹160</div>
+      </div>
+    </section>
+
+    <!-- VEG STARTERS -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🥦</div>
+        <h2 class="menu-section__title">Veg Starters</h2>
+        <span class="menu-section__count">10 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Veg Manchuria</div></div>
+        <div class="menu-row__price">₹200</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chilli Mushroom</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mushroom 65</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Pepper Mushroom</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chilli Babycorn</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Pepper Babycorn</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Gobi Manchuria</div></div>
+        <div class="menu-row__price">₹180</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Paneer 65</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Dragon Paneer</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Paneer Majestic</div></div>
+        <div class="menu-row__price">₹260</div>
+      </div>
+    </section>
+
+    <!-- VEG CURRIES -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🍛</div>
+        <h2 class="menu-section__title">Veg Curries</h2>
+        <span class="menu-section__count">7 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Paneer Butter Masala</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Kadai Paneer</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Shahi Paneer</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Paneer Tikka Masala</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Palak Paneer</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Paneer Chatpat</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Kaju Paneer</div></div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mushroom Masala</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+    </section>
+
+    <!-- NON VEG CURRIES -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🥘</div>
+        <h2 class="menu-section__title">Non Veg Curries</h2>
+        <span class="menu-section__count">13 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Egg Masala</div></div>
+        <div class="menu-row__price">₹150</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Butter Chicken</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Kadai Chicken</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Methi Chicken</div></div>
+        <div class="menu-row__price">₹240</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Kolhapuri</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Tikka Masala</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Punjabi Chicken</div></div>
+        <div class="menu-row__price">₹260</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Telangana Chicken</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Andhra Chicken</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Rara</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Dum Ka Chicken</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Afghani Chicken</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mutton Kheema</div></div>
+        <div class="menu-row__price">₹380</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mutton Rogan Ghosh</div></div>
+        <div class="menu-row__price">₹380</div>
+      </div>
+    </section>
+
+    <!-- ROTIS -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🫓</div>
+        <h2 class="menu-section__title">Rotis</h2>
+        <span class="menu-section__count">5 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Rumali Roti</div></div>
+        <div class="menu-row__price">₹15</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Tandoori Roti</div></div>
+        <div class="menu-row__price">₹20</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Plain Naan</div></div>
+        <div class="menu-row__price">₹30</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Butter Naan</div></div>
+        <div class="menu-row__price">₹40</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Garlic Naan</div></div>
+        <div class="menu-row__price">₹50</div>
+      </div>
+    </section>
+
+    <!-- RICE -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🍚</div>
+        <h2 class="menu-section__title">Rice</h2>
+        <span class="menu-section__count">3 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Jeera Rice</div></div>
+        <div class="menu-row__price">₹140</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Ghee Rice</div></div>
+        <div class="menu-row__price">₹160</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Curd Rice</div></div>
+        <div class="menu-row__price">₹120</div>
+      </div>
+    </section>
+
+    <!-- RICE / NOODLES -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🍜</div>
+        <h2 class="menu-section__title">Rice / Noodles</h2>
+        <span class="menu-section__count">18 items</span>
+      </div>
+      <div class="menu-sub">
+        <span class="menu-sub__line"></span>
+        <span class="menu-sub__text">Fried Rice</span>
+        <span class="menu-sub__line"></span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Veg Fried Rice</div></div>
+        <div class="menu-row__price">₹140</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mushroom Fried Rice</div></div>
+        <div class="menu-row__price">₹160</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Paneer Fried Rice</div></div>
+        <div class="menu-row__price">₹170</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Egg Fried Rice</div></div>
+        <div class="menu-row__price">₹140</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Fried Rice</div></div>
+        <div class="menu-row__price">₹200</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Schezwan Fried Rice</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Prawn Fried Rice</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mixed Non Veg Fried Rice</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-sub">
+        <span class="menu-sub__line"></span>
+        <span class="menu-sub__text">Noodles</span>
+        <span class="menu-sub__line"></span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Veg Soft Noodles</div></div>
+        <div class="menu-row__price">₹140</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Veg Schezwan Noodles</div></div>
+        <div class="menu-row__price">₹150</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Veg Chilli Garlic Noodles</div></div>
+        <div class="menu-row__price">₹180</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Egg Noodles</div></div>
+        <div class="menu-row__price">₹140</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Soft Noodles</div></div>
+        <div class="menu-row__price">₹200</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Schezwan Noodles</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Chilli Garlic Noodles</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mixed Non Veg Noodles</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+    </section>
+
+    <!-- TANDOORI -->
+    <section class="menu-section">
+      <div class="menu-section__header">
+        <div class="menu-section__icon">🔥</div>
+        <h2 class="menu-section__title">Tandoori</h2>
+        <span class="menu-section__count">14 items</span>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Hara Bara Kebab</div></div>
+        <div class="menu-row__price">₹220</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Paneer Tikka</div></div>
+        <div class="menu-row__price">₹250</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Malai Broccoli Tikka</div></div>
+        <div class="menu-row__price">₹300</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Tandoori Chicken</div></div>
+        <div class="menu-row__price">₹200 / ₹380</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Tangdi Kebab</div></div>
+        <div class="menu-row__price">₹200 / ₹380</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Chicken Tikka</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Angara Kebab</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Hariyali Kebab</div></div>
+        <div class="menu-row__price">₹280</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Murgh Malai Kebab</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mutton Sheekh Kebab</div></div>
+        <div class="menu-row__price">₹440</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Mutton Galouti Kebab</div></div>
+        <div class="menu-row__price">₹450</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Fish Tikka</div></div>
+        <div class="menu-row__price">₹320</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Fish Malai Tikka</div></div>
+        <div class="menu-row__price">₹340</div>
+      </div>
+      <div class="menu-row">
+        <div class="menu-row__info"><div class="menu-row__name">Tandoori Prawns</div></div>
+        <div class="menu-row__price">₹350</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="footer">
+    <div class="footer__top">
+      <nav class="footer__links">
+        <a href="#" class="footer__link">Instagram</a>
+        <a href="#" class="footer__link">Zomato</a>
+        <a href="#" class="footer__link">Google Maps</a>
+      </nav>
+      <div class="footer__meta">
+        <span>Hyderabad — <span id="localTime">00:00</span> IST</span>
+        <span>© 2026 Lucky's Biriyanihouse. All flavours reserved.</span>
+      </div>
+    </div>
+    <div class="footer__logo-wrap">
+      <h2 class="footer__logo" aria-hidden="true">LUCKY'S BIRIYANIHOUSE</h2>
+    </div>
+  </footer>
+
+  <!-- ════════ SCROLL TO TOP ════════ -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    // Local time
+    const timeEl = document.getElementById("localTime");
+    function updateTime() {
+      const now = new Date().toLocaleTimeString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit", minute: "2-digit", hour12: true,
+      });
+      timeEl.textContent = `Bengaluru — ${now} IST`;
+    }
+    updateTime();
+    setInterval(updateTime, 30000);
+
+    // Scroll to top button
+    const scrollTopBtn = document.getElementById("scrollTop");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 500) scrollTopBtn.classList.add("visible");
+      else scrollTopBtn.classList.remove("visible");
+    });
+
+    // Hide nav on scroll down
+    let lastScroll = 0;
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      if (scrollY > lastScroll && scrollY > 150) nav.classList.add("is-hidden");
+      else nav.classList.remove("is-hidden");
+      lastScroll = scrollY;
+    });
+  </script>
+</body>
+</html>
