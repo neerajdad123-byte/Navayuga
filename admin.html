@@ -34,7 +34,9 @@
     <nav class="admin-tabs">
       <button class="admin-tabs__btn active" data-tab="menu">Menu</button>
       <button class="admin-tabs__btn" data-tab="special">Special of the Day</button>
-      <button class="admin-tabs__btn" data-tab="users">Users</button>
+      <button class="admin-tabs__btn" data-tab="festival">Festival Offers</button>
+      <button class="admin-tabs__btn" data-tab="birthdays">Birthdays</button>
+      <button class="admin-tabs__btn" data-tab="users">Customers</button>
       <button class="admin-tabs__btn" data-tab="settings">Settings</button>
     </nav>
 
@@ -83,9 +85,51 @@
       </form>
     </section>
 
+    <!-- FESTIVAL OFFERS TAB -->
+    <section class="admin-panel" id="tab-festival">
+      <h3>Festival / Seasonal Offer Message</h3>
+      <p style="color:var(--cream-dim);font-size:0.82rem;margin-bottom:1.5rem">This banner appears at the top of the main site as a festive announcement.</p>
+      <form class="admin-form" id="festivalForm">
+        <div class="admin-form__row">
+          <label>Offer Title (e.g. "🎉 Diwali Special")</label>
+          <input type="text" id="festivalTitle" placeholder="Diwali Special" />
+        </div>
+        <div class="admin-form__row">
+          <label>Message</label>
+          <input type="text" id="festivalMsg" placeholder="Get 20% off on all biryani orders this Diwali!" />
+        </div>
+        <div class="admin-form__row">
+          <label>Link (optional — e.g. menu.html)</label>
+          <input type="text" id="festivalLink" placeholder="menu.html" />
+        </div>
+        <div class="admin-form__row">
+          <label>Background Color</label>
+          <input type="text" id="festivalBg" placeholder="#c47a1a" value="#c47a1a" />
+        </div>
+        <div class="admin-form__row">
+          <label>
+            <input type="checkbox" id="festivalActive" /> Active
+          </label>
+        </div>
+        <button type="submit" class="admin-btn admin-btn--save">Save Festival Offer</button>
+      </form>
+    </section>
+
+    <!-- BIRTHDAYS TAB -->
+    <section class="admin-panel" id="tab-birthdays">
+      <h3>🎂 Upcoming Birthdays</h3>
+      <p style="color:var(--cream-dim);font-size:0.82rem;margin-bottom:1.5rem">Customers who shared their birthday. Sorted by next upcoming.</p>
+      <div class="admin-list" id="birthdayList">
+        <div class="admin-empty">No customer birthdays recorded yet.</div>
+      </div>
+    </section>
+
     <!-- USERS TAB -->
     <section class="admin-panel" id="tab-users">
-      <h3>User Submissions</h3>
+      <div class="admin-panel__head">
+        <h3>Customers</h3>
+        <button class="admin-btn admin-btn--add" id="btnExportCSV">📥 Export CSV</button>
+      </div>
       <div class="admin-list" id="userList"></div>
     </section>
 

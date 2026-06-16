@@ -473,7 +473,67 @@ userPopupForm.addEventListener("submit", (e) => {
 popupSkip.addEventListener("click", closePopup);
 
 /* ───────────────────────────────
-   13. REFRESH ON RESIZE / LOAD
+   13. FESTIVAL BANNER
+─────────────────────────────── */
+function syncFestivalBanner() {
+  const banner = document.getElementById("festivalBanner");
+  const bannerLink = document.getElementById("festivalBannerLink");
+  const bannerTitle = document.getElementById("festivalBannerTitle");
+  const bannerMsg = document.getElementById("festivalBannerMsg");
+  const bannerClose = document.getElementById("festivalBannerClose");
+  if (!banner) return;
+
+  let festival;
+  try {
+    festival = JSON.parse(localStorage.getItem("luckys_festival")) || null;
+  } catch (e) { festival = null; }
+
+  if (festival && festival.active && (festival.title || festival.msg)) {
+    banner.style.display = "flex";
+    banner.style.background = festival.bg || "#c47a1a";
+    bannerTitle.textContent = festival.title;
+    bannerMsg.textContent = festival.msg;
+    if (festival.link) bannerLink.href = festival.link;
+    else bannerLink.removeAttribute("href");
+
+    // Push nav down
+    const nav = document.getElementById("nav");
+    if (nav) nav.style.top = "40px";
+  } else {
+    banner.style.display = "none";
+    const nav = document.getElementById("nav");
+    if (nav) nav.style.top = "0";
+  }
+
+  bannerClose.addEventListener("click", () => {
+    banner.style.display = "none";
+    const nav = document.getElementById("nav");
+    if (nav) nav.style.top = "0";
+  });
+}
+syncFestivalBanner();
+
+/* ───────────────────────────────
+   14. SAVE USER DATA TO BACKED
+─────────────────────────────── */
+function appendToBackedFile(userData) {
+  try {
+    let backed = JSON.parse(localStorage.getItem("luckys_backed_users")) || [];
+    backed.push({ ...userData, savedAt: new Date().toISOString() });
+    localStorage.setItem("luckys_backed_users", JSON.stringify(backed));
+  } catch (e) {}
+}
+// Hook into existing user form submission — intercept after the original handler
+const origSubmitHandler = userPopupForm.onsubmit;
+userPopupForm.addEventListener("submit", (e) => {
+  setTimeout(() => {
+    const data = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_USER)); } catch (e) { return null; } })();
+    if (data) appendToBackedFile(data);
+  }, 100);
+});
+
+/* ───────────────────────────────
+   15. REFRESH ON RESIZE / LOAD
 ─────────────────────────────── */
 window.addEventListener("load", () => {
   ScrollTrigger.refresh();

@@ -3,6 +3,7 @@
 const DEFAULT_PASSWORD = "luckys2024";
 const STORAGE_MENU = "luckys_menu";
 const STORAGE_SPECIAL = "luckys_special";
+const STORAGE_FESTIVAL = "luckys_festival";
 const STORAGE_USERS = "luckys_users";
 const STORAGE_PASSWORD = "luckys_admin_password";
 
@@ -18,8 +19,24 @@ function getSpecial() {
 }
 function saveSpecial(s) { localStorage.setItem(STORAGE_SPECIAL, JSON.stringify(s)); }
 
+function getFestival() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_FESTIVAL)) || { title: "", msg: "", link: "", bg: "#c47a1a", active: false }; } catch (e) { return { title: "", msg: "", link: "", bg: "#c47a1a", active: false }; }
+}
+function saveFestival(f) { localStorage.setItem(STORAGE_FESTIVAL, JSON.stringify(f)); }
+
 function getUsers() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; } catch (e) { return []; }
+  try {
+    const regular = JSON.parse(localStorage.getItem(STORAGE_USERS)) || [];
+    const backed = JSON.parse(localStorage.getItem("luckys_backed_users")) || [];
+    // Merge and deduplicate by name+whatsapp
+    const seen = new Set();
+    const merged = [];
+    [...backed, ...regular].forEach(u => {
+      const key = (u.name || "") + "|" + (u.whatsapp || "");
+      if (!seen.has(key)) { seen.add(key); merged.push(u); }
+    });
+    return merged;
+  } catch (e) { return []; }
 }
 
 function getStoredPassword() {
@@ -27,7 +44,7 @@ function getStoredPassword() {
 }
 function setStoredPassword(pw) { localStorage.setItem(STORAGE_PASSWORD, pw); }
 
-/* DOM */
+/* ═══ DOM ═══ */
 const loginScreen = document.getElementById("adminLogin");
 const dashScreen = document.getElementById("adminDash");
 const loginForm = document.getElementById("loginForm");
@@ -36,7 +53,9 @@ const loginError = document.getElementById("loginError");
 const btnLogout = document.getElementById("btnLogout");
 const menuList = document.getElementById("menuList");
 const userList = document.getElementById("userList");
+const birthdayList = document.getElementById("birthdayList");
 const specialForm = document.getElementById("specialForm");
+const festivalForm = document.getElementById("festivalForm");
 const passwordForm = document.getElementById("passwordForm");
 const passwordMsg = document.getElementById("passwordMsg");
 const editModal = document.getElementById("editModal");
@@ -67,26 +86,30 @@ function fileToDataUrl(file) {
 }
 
 /* Special img file preview */
-specialImgFile.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const dataUrl = await fileToDataUrl(file);
-  document.getElementById("specialImg").value = dataUrl;
-  specialImgPreview.style.display = "block";
-  specialImgPreviewImg.src = dataUrl;
-});
+if (specialImgFile) {
+  specialImgFile.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const dataUrl = await fileToDataUrl(file);
+    document.getElementById("specialImg").value = dataUrl;
+    specialImgPreview.style.display = "block";
+    specialImgPreviewImg.src = dataUrl;
+  });
+}
 
 /* Edit img file preview */
-editImgFile.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const dataUrl = await fileToDataUrl(file);
-  pendingEditFileDataUrl = dataUrl;
-  editImgPreview.style.display = "block";
-  editImgPreviewImg.src = dataUrl;
-});
+if (editImgFile) {
+  editImgFile.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const dataUrl = await fileToDataUrl(file);
+    pendingEditFileDataUrl = dataUrl;
+    editImgPreview.style.display = "block";
+    editImgPreviewImg.src = dataUrl;
+  });
+}
 
-/* LOGIN */
+/* ═══ LOGIN ═══ */
 if (sessionStorage.getItem("luckys_admin")) {
   showDash();
 }
@@ -114,7 +137,7 @@ function showDash() {
   renderAll();
 }
 
-/* TABS */
+/* ═══ TABS ═══ */
 document.querySelectorAll(".admin-tabs__btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".admin-tabs__btn").forEach((b) => b.classList.remove("active"));
@@ -125,7 +148,7 @@ document.querySelectorAll(".admin-tabs__btn").forEach((btn) => {
   });
 });
 
-/* MENU */
+/* ═══ MENU ═══ */
 function renderMenu() {
   const menu = getMenu();
   if (menu.length === 0) {
@@ -133,8 +156,7 @@ function renderMenu() {
     return;
   }
   menuList.innerHTML = menu
-    .map(
-      (item, i) => `
+    .map((item, i) => `
     <div class="admin-list__item">
       <img src="${item.img}" alt="${item.name}" />
       <div class="admin-list__item-info">
@@ -146,8 +168,7 @@ function renderMenu() {
         <button class="admin-btn admin-btn--edit" data-edit="${i}">Edit</button>
         <button class="admin-btn admin-btn--del" data-del="${i}">Delete</button>
       </div>
-    </div>`
-    )
+    </div>`)
     .join("");
 
   menuList.querySelectorAll("[data-edit]").forEach((btn) => {
@@ -165,7 +186,6 @@ function openEdit(index) {
   editImgPreview.style.display = "none";
   editImgPreviewImg.src = "";
   editImgFile.value = "";
-
   const menu = getMenu();
   if (index >= 0) {
     document.getElementById("editTitle").textContent = "Edit Item";
@@ -190,12 +210,7 @@ editForm.addEventListener("submit", (e) => {
   const menu = getMenu();
   const idx = parseInt(editIndex.value);
   const imgUrl = pendingEditFileDataUrl || editImg.value.trim() || "images/placeholder.jpg";
-  const item = {
-    name: editName.value.trim(),
-    desc: editDesc.value.trim(),
-    price: parseInt(editPrice.value) || 0,
-    img: imgUrl,
-  };
+  const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl };
   if (!item.name || !item.price) return;
   if (idx >= 0) menu[idx] = item;
   else menu.push(item);
@@ -215,7 +230,7 @@ function deleteItem(index) {
   renderMenu();
 }
 
-/* SPECIAL */
+/* ═══ SPECIAL ═══ */
 function renderSpecial() {
   const s = getSpecial();
   document.getElementById("specialName").value = s.name;
@@ -238,29 +253,120 @@ specialForm.addEventListener("submit", (e) => {
   renderSpecial();
 });
 
-/* USERS */
-function renderUsers() {
+/* ═══ FESTIVAL OFFERS ═══ */
+function renderFestival() {
+  const f = getFestival();
+  document.getElementById("festivalTitle").value = f.title;
+  document.getElementById("festivalMsg").value = f.msg;
+  document.getElementById("festivalLink").value = f.link;
+  document.getElementById("festivalBg").value = f.bg;
+  document.getElementById("festivalActive").checked = f.active;
+}
+
+festivalForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  saveFestival({
+    title: document.getElementById("festivalTitle").value.trim(),
+    msg: document.getElementById("festivalMsg").value.trim(),
+    link: document.getElementById("festivalLink").value.trim(),
+    bg: document.getElementById("festivalBg").value.trim() || "#c47a1a",
+    active: document.getElementById("festivalActive").checked,
+  });
+  alert("Festival offer saved. It will appear on the main site.");
+  renderFestival();
+});
+
+/* ═══ BIRTHDAYS ═══ */
+function renderBirthdays() {
   const users = getUsers();
-  if (users.length === 0) {
-    userList.innerHTML = '<div class="admin-empty">No user submissions yet.</div>';
+  const withBirthdays = users.filter(u => u.birthday);
+
+  if (withBirthdays.length === 0) {
+    birthdayList.innerHTML = '<div class="admin-empty">No customer birthdays recorded yet.</div>';
     return;
   }
-  userList.innerHTML = users
-    .map(
-      (u, i) => `
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+
+  // Sort by upcoming date (closest first, wrapping around year)
+  const sorted = withBirthdays.map(u => {
+    const parts = u.birthday.split("-");
+    const month = parseInt(parts[1]) - 1;
+    const day = parseInt(parts[2]);
+    let date = new Date(currentYear, month, day);
+    if (date < today) date = new Date(currentYear + 1, month, day);
+    return { ...u, _nextDate: date };
+  }).sort((a, b) => a._nextDate - b._nextDate);
+
+  birthdayList.innerHTML = sorted.map((u, i) => {
+    const d = u._nextDate;
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    const dateStr = days[d.getDay()] + ", " + d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+    const daysUntil = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
+    const badge = daysUntil <= 7 ? '<span class="admin-badge">Soon!</span>' : '';
+
+    return `
     <div class="admin-user">
       <div class="admin-user__row">
         <div class="admin-user__field"><span>Name</span><span>${u.name || "—"}</span></div>
+        <div class="admin-user__field"><span>Birthday</span><span>${u.birthday} ${badge}</span></div>
+        <div class="admin-user__field"><span>Upcoming</span><span>${dateStr} (${daysUntil} days)</span></div>
+        <div class="admin-user__field"><span>WhatsApp</span><span>${u.whatsapp || "—"}</span></div>
+      </div>
+      <div class="admin-user__time">Submitted: ${u.time || "Unknown"}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ═══ CUSTOMERS + CSV EXPORT ═══ */
+function renderUsers() {
+  const users = getUsers();
+  const backedCount = (() => { try { return (JSON.parse(localStorage.getItem("luckys_backed_users")) || []).length; } catch(e) { return 0; } })();
+
+  let headerInfo = "";
+  if (backedCount > 0) headerInfo = `<span style="font-size:0.75rem;color:var(--cream-dim);margin-left:0.5rem">(${backedCount} backed)</span>`;
+
+  if (users.length === 0) {
+    userList.innerHTML = '<div class="admin-empty">No customers yet.</div>';
+    return;
+  }
+  userList.innerHTML = `<p style="color:var(--cream-dim);font-size:0.78rem;margin-bottom:1rem">Total customers: ${users.length} ${headerInfo}</p>` + users
+    .map((u, i) => {
+      const isBacked = u.savedAt ? '<span class="admin-badge" style="background:var(--saffron);margin-left:0.4rem">Backed</span>' : '';
+      return `
+    <div class="admin-user">
+      <div class="admin-user__row">
+        <div class="admin-user__field"><span>Name</span><span>${u.name || "—"}${isBacked}</span></div>
         <div class="admin-user__field"><span>WhatsApp</span><span>${u.whatsapp || "—"}</span></div>
         <div class="admin-user__field"><span>Birthday</span><span>${u.birthday || "—"}</span></div>
       </div>
-      <div class="admin-user__time">Submitted: ${u.time || "Unknown"}</div>
-    </div>`
-    )
+      <div class="admin-user__time">${u.savedAt ? 'Backed: ' + u.savedAt : 'Submitted: ' + (u.time || "Unknown")}</div>
+    </div>`;
+    })
     .join("");
 }
 
-/* PASSWORD */
+document.getElementById("btnExportCSV").addEventListener("click", () => {
+  const users = getUsers();
+  if (users.length === 0) { alert("No customers to export."); return; }
+
+  let csv = "Name,WhatsApp,Birthday,Submitted\n";
+  users.forEach(u => {
+    csv += `"${(u.name || "").replace(/"/g, '""')}","${(u.whatsapp || "").replace(/"/g, '""')}","${u.birthday || ""}","${(u.time || "").replace(/"/g, '""')}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "luckys_customers_" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ═══ PASSWORD ═══ */
 passwordForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const current = document.getElementById("currentPassword").value;
@@ -282,9 +388,11 @@ passwordForm.addEventListener("submit", (e) => {
   document.getElementById("newPassword").value = "";
 });
 
-/* RENDER ALL */
+/* ═══ RENDER ALL ═══ */
 function renderAll() {
   renderMenu();
   renderSpecial();
+  renderFestival();
+  renderBirthdays();
   renderUsers();
 }
