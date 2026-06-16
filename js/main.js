@@ -473,45 +473,33 @@ userPopupForm.addEventListener("submit", (e) => {
 popupSkip.addEventListener("click", closePopup);
 
 /* ───────────────────────────────
-   13. FESTIVAL BANNER
+   13. SPECIAL OF THE DAY (injected)
 ─────────────────────────────── */
-function syncFestivalBanner() {
-  const banner = document.getElementById("festivalBanner");
-  const bannerLink = document.getElementById("festivalBannerLink");
-  const bannerTitle = document.getElementById("festivalBannerTitle");
-  const bannerMsg = document.getElementById("festivalBannerMsg");
-  const bannerClose = document.getElementById("festivalBannerClose");
-  if (!banner) return;
+function syncSpecial() {
+  let s;
+  try { s = JSON.parse(localStorage.getItem("luckys_special")) || null; } catch (e) { s = null; }
+  const existing = document.getElementById("specialSection");
+  if (existing) existing.remove();
+  if (!s || !s.active || !s.name) return;
 
-  let festival;
-  try {
-    festival = JSON.parse(localStorage.getItem("luckys_festival")) || null;
-  } catch (e) { festival = null; }
-
-  if (festival && festival.active && (festival.title || festival.msg)) {
-    banner.style.display = "flex";
-    banner.style.background = festival.bg || "#c47a1a";
-    bannerTitle.textContent = festival.title;
-    bannerMsg.textContent = festival.msg;
-    if (festival.link) bannerLink.href = festival.link;
-    else bannerLink.removeAttribute("href");
-
-    // Push nav down
-    const nav = document.getElementById("nav");
-    if (nav) nav.style.top = "40px";
-  } else {
-    banner.style.display = "none";
-    const nav = document.getElementById("nav");
-    if (nav) nav.style.top = "0";
-  }
-
-  bannerClose.addEventListener("click", () => {
-    banner.style.display = "none";
-    const nav = document.getElementById("nav");
-    if (nav) nav.style.top = "0";
-  });
+  const section = document.createElement("section");
+  section.id = "specialSection";
+  section.className = "special";
+  section.innerHTML = `
+    <div class="special__ribbon">✦ Special of the Day ✦</div>
+    <div class="special__inner">
+      ${s.img ? `<div class="special__img"><img src="${s.img}" alt="${s.name}" /></div>` : ""}
+      <div class="special__info">
+        <h2 class="special__name">${s.name}</h2>
+        <p class="special__desc">${s.desc}</p>
+        <span class="special__price">₹ ${s.price}</span>
+      </div>
+    </div>
+  `;
+  const marquee = document.querySelector(".marquee");
+  if (marquee) marquee.insertAdjacentElement("afterend", section);
 }
-syncFestivalBanner();
+syncSpecial();
 
 /* ───────────────────────────────
    14. SAVE USER DATA TO BACKED

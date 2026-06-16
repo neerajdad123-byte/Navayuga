@@ -87,8 +87,8 @@
 
     <!-- FESTIVAL OFFERS TAB -->
     <section class="admin-panel" id="tab-festival">
-      <h3>Festival / Seasonal Offer Message</h3>
-      <p style="color:var(--cream-dim);font-size:0.82rem;margin-bottom:1.5rem">This banner appears at the top of the main site as a festive announcement.</p>
+      <h3>Festival / Seasonal Offers</h3>
+      <p style="color:var(--cream-dim);font-size:0.82rem;margin-bottom:1.5rem">Create a festive message and send it to all customers who shared their WhatsApp number.</p>
       <form class="admin-form" id="festivalForm">
         <div class="admin-form__row">
           <label>Offer Title (e.g. "🎉 Diwali Special")</label>
@@ -96,23 +96,14 @@
         </div>
         <div class="admin-form__row">
           <label>Message</label>
-          <input type="text" id="festivalMsg" placeholder="Get 20% off on all biryani orders this Diwali!" />
+          <textarea id="festivalMsg" rows="3" placeholder="Wishing you a happy Diwali! Enjoy 20% off on all biryani orders this week. Visit us or order online." style="resize:vertical"></textarea>
         </div>
-        <div class="admin-form__row">
-          <label>Link (optional — e.g. menu.html)</label>
-          <input type="text" id="festivalLink" placeholder="menu.html" />
-        </div>
-        <div class="admin-form__row">
-          <label>Background Color</label>
-          <input type="text" id="festivalBg" placeholder="#c47a1a" value="#c47a1a" />
-        </div>
-        <div class="admin-form__row">
-          <label>
-            <input type="checkbox" id="festivalActive" /> Active
-          </label>
-        </div>
-        <button type="submit" class="admin-btn admin-btn--save">Save Festival Offer</button>
+        <button type="submit" class="admin-btn admin-btn--save">Save & Send to WhatsApp</button>
       </form>
+      <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;display:none" id="festivalPreview">
+        <h4 style="font-size:0.8rem;color:var(--cream-dim);margin-bottom:0.8rem">📤 WhatsApp numbers with offers:</h4>
+        <div id="festivalRecipients" style="max-height:200px;overflow-y:auto;font-size:0.78rem;color:var(--cream-dim)"></div>
+      </div>
     </section>
 
     <!-- BIRTHDAYS TAB -->
