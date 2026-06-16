@@ -274,6 +274,23 @@ em { font-family: var(--serif); font-style: italic; }
   max-width: 26rem;
   font-size: 1.05rem; line-height: 1.7; color: var(--cream-dim);
 }
+.hero__actions {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 1.2rem;
+}
+.hero__menu-btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--bg);
+  background: var(--saffron);
+  border-radius: 99px;
+  text-decoration: none;
+  transition: background 0.35s, transform 0.35s;
+}
+.hero__menu-btn:hover {
+  background: var(--saffron-light);
+  transform: scale(1.04);
+}
 .hero__scroll { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
 .hero__scroll-text {
   font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
@@ -352,6 +369,50 @@ em { font-family: var(--serif); font-style: italic; }
   margin: 0 0.6rem;
 }
 @keyframes marquee { to { transform: translateX(-33.333%); } }
+
+/* ═══════════════ SPECIALS ═══════════════ */
+.specials {
+  padding: 3rem 2.5rem;
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.specials__ribbon {
+  text-align: center;
+  font-family: var(--serif); font-size: 0.85rem; font-weight: 400;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 2.5rem;
+}
+.specials__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px; margin: 0 auto;
+}
+.specials__card {
+  display: flex; gap: 1rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.specials__card:hover { border-color: var(--saffron); transform: translateY(-2px); }
+.specials__card-img {
+  width: 100px; height: 100px;
+  border-radius: 6px; overflow: hidden; flex-shrink: 0;
+}
+.specials__card-img img { width: 100%; height: 100%; object-fit: cover; }
+.specials__card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+.specials__card-name { font-family: var(--serif); font-weight: 400; font-size: 1.05rem; color: var(--cream); margin-bottom: 0.3rem; }
+.specials__card-desc { font-size: 0.78rem; color: var(--cream-dim); line-height: 1.4; margin-bottom: 0.5rem; }
+.specials__card-price { font-family: var(--serif); font-size: 1rem; color: var(--saffron); }
+
+@media (max-width: 700px) {
+  .specials { padding: 2rem 1.4rem; }
+  .specials__grid { grid-template-columns: 1fr; }
+}
 
 /* ═══════════════ STORY ═══════════════ */
 .story { padding: clamp(6rem, 12vw, 11rem) 2.5rem; }

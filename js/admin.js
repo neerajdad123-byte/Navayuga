@@ -152,9 +152,9 @@ function getMenu() {
 function saveMenu(menu) { localStorage.setItem(STORAGE_MENU, JSON.stringify(menu)); }
 
 function getSpecial() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_SPECIAL)) || { name: "", desc: "", price: "", img: "", active: false }; } catch (e) { return { name: "", desc: "", price: "", img: "", active: false }; }
+  try { return JSON.parse(localStorage.getItem(STORAGE_SPECIAL)) || []; } catch (e) { return []; }
 }
-function saveSpecial(s) { localStorage.setItem(STORAGE_SPECIAL, JSON.stringify(s)); }
+function saveSpecial(list) { localStorage.setItem(STORAGE_SPECIAL, JSON.stringify(list)); }
 
 function getFestival() {
   try { return JSON.parse(localStorage.getItem(STORAGE_FESTIVAL)) || { title: "", msg: "" }; } catch (e) { return { title: "", msg: "" }; }
@@ -191,6 +191,7 @@ const btnLogout = document.getElementById("btnLogout");
 const menuList = document.getElementById("menuList");
 const userList = document.getElementById("userList");
 const birthdayList = document.getElementById("birthdayList");
+const specialList = document.getElementById("specialList");
 const specialForm = document.getElementById("specialForm");
 const festivalForm = document.getElementById("festivalForm");
 const passwordForm = document.getElementById("passwordForm");
@@ -206,11 +207,10 @@ const editImg = document.getElementById("editImg");
 const editImgFile = document.getElementById("editImgFile");
 const editImgPreview = document.getElementById("editImgPreview");
 const editImgPreviewImg = document.getElementById("editImgPreviewImg");
-const specialImgFile = document.getElementById("specialImgFile");
-const specialImgPreview = document.getElementById("specialImgPreview");
-const specialImgPreviewImg = document.getElementById("specialImgPreviewImg");
 
 let pendingEditFileDataUrl = "";
+
+let pendingSpecialFileDataUrl = "";
 
 /* Image file → base64 */
 function fileToDataUrl(file) {
@@ -219,18 +219,6 @@ function fileToDataUrl(file) {
     reader.onload = () => resolve(reader.result);
     reader.onerror = reject;
     reader.readAsDataURL(file);
-  });
-}
-
-/* Special img file preview */
-if (specialImgFile) {
-  specialImgFile.addEventListener("change", async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const dataUrl = await fileToDataUrl(file);
-    document.getElementById("specialImg").value = dataUrl;
-    specialImgPreview.style.display = "block";
-    specialImgPreviewImg.src = dataUrl;
   });
 }
 
@@ -367,28 +355,120 @@ function deleteItem(index) {
   renderMenu();
 }
 
-/* ═══ SPECIAL ═══ */
+/* ═══ SPECIAL ITEMS ═══ */
 function renderSpecial() {
-  const s = getSpecial();
-  document.getElementById("specialName").value = s.name;
-  document.getElementById("specialDesc").value = s.desc;
-  document.getElementById("specialPrice").value = s.price;
-  document.getElementById("specialImg").value = s.img;
-  document.getElementById("specialActive").checked = s.active;
+  const specials = getSpecial();
+  if (specials.length === 0) {
+    specialList.innerHTML = '<div class="admin-empty">No special items yet. Add one above.</div>';
+    return;
+  }
+  specialList.innerHTML = specials
+    .map((item, i) => `
+    <div class="admin-list__item">
+      <img src="${item.img}" alt="${item.name}" />
+      <div class="admin-list__item-info">
+        <div class="admin-list__item-name">${item.name} ${item.active ? '<span class="admin-badge" style="background:var(--green);margin-left:0.4rem">Active</span>' : '<span class="admin-badge" style="background:var(--cream-dim);margin-left:0.4rem">Inactive</span>'}</div>
+        <div class="admin-list__item-desc">${item.desc}</div>
+      </div>
+      <div class="admin-list__item-price">₹ ${item.price}</div>
+      <div class="admin-list__item-actions">
+        <button class="admin-btn admin-btn--edit" data-stoggle="${i}">${item.active ? 'Deactivate' : 'Activate'}</button>
+        <button class="admin-btn admin-btn--edit" data-sedit="${i}">Edit</button>
+        <button class="admin-btn admin-btn--del" data-sdel="${i}">Delete</button>
+      </div>
+    </div>`)
+    .join("");
+
+  specialList.querySelectorAll("[data-stoggle]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = parseInt(btn.dataset.stoggle);
+      const specials = getSpecial();
+      specials[i].active = !specials[i].active;
+      saveSpecial(specials);
+      renderSpecial();
+    });
+  });
+  specialList.querySelectorAll("[data-sedit]").forEach((btn) => {
+    btn.addEventListener("click", () => openSpecialEdit(parseInt(btn.dataset.sedit)));
+  });
+  specialList.querySelectorAll("[data-sdel]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!confirm("Delete this special item?")) return;
+      const specials = getSpecial();
+      specials.splice(parseInt(btn.dataset.sdel), 1);
+      saveSpecial(specials);
+      renderSpecial();
+    });
+  });
 }
 
-specialForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  saveSpecial({
-    name: document.getElementById("specialName").value.trim(),
-    desc: document.getElementById("specialDesc").value.trim(),
-    price: parseInt(document.getElementById("specialPrice").value) || "",
-    img: document.getElementById("specialImg").value.trim(),
-    active: document.getElementById("specialActive").checked,
-  });
-  alert("Special item saved.");
-  renderSpecial();
-});
+// Add new special button
+const btnAddSpecial = document.getElementById("btnAddSpecial");
+if (btnAddSpecial) btnAddSpecial.addEventListener("click", () => openSpecialEdit(-1));
+
+function openSpecialEdit(index) {
+  pendingSpecialFileDataUrl = "";
+  editImgPreview.style.display = "none";
+  editImgPreviewImg.src = "";
+  editImgFile.value = "";
+  const specials = getSpecial();
+
+  // Populate edit form fields with special item data
+  if (index >= 0) {
+    document.getElementById("editTitle").textContent = "Edit Special";
+    editIndex.value = "special_" + index;
+    editName.value = specials[index].name;
+    editDesc.value = specials[index].desc;
+    editPrice.value = specials[index].price;
+    editImg.value = specials[index].img;
+  } else {
+    document.getElementById("editTitle").textContent = "Add Special Item";
+    editIndex.value = "special_new";
+    editName.value = "";
+    editDesc.value = "";
+    editPrice.value = "";
+    editImg.value = "images/placeholder.jpg";
+  }
+  editModal.classList.add("is-open");
+
+  // Hook file upload to special flow
+  editImgFile.addEventListener("change", async function handler(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const dataUrl = await fileToDataUrl(file);
+    pendingSpecialFileDataUrl = dataUrl;
+    editImgPreview.style.display = "block";
+    editImgPreviewImg.src = dataUrl;
+  }, { once: true });
+}
+
+// Override edit form submit to handle specials too
+const origEditSubmit = editForm.onsubmit;
+editForm.addEventListener("submit", (e) => {
+  const idxVal = editIndex.value;
+  if (typeof idxVal === "string" && idxVal.startsWith("special_")) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const specials = getSpecial();
+    const imgUrl = pendingSpecialFileDataUrl || editImg.value.trim() || "images/placeholder.jpg";
+    const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, active: true };
+    if (!item.name || !item.price) return;
+
+    if (idxVal === "special_new") {
+      specials.push(item);
+    } else {
+      const i = parseInt(idxVal.replace("special_", ""));
+      // Preserve active state
+      item.active = specials[i].active;
+      specials[i] = item;
+    }
+    saveSpecial(specials);
+    editModal.classList.remove("is-open");
+    editForm.reset();
+    editIndex.value = "";
+    renderSpecial();
+  }
+}, true);
 
 /* ═══ FESTIVAL OFFERS ═══ */
 function renderFestival() {

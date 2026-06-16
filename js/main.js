@@ -466,33 +466,40 @@ userPopupForm.addEventListener("submit", (e) => {
 popupSkip.addEventListener("click", closePopup);
 
 /* ───────────────────────────────
-   13. SPECIAL OF THE DAY (injected)
+   13. SPECIAL ITEMS (injected)
 ─────────────────────────────── */
-function syncSpecial() {
-  let s;
-  try { s = JSON.parse(localStorage.getItem("luckys_special")) || null; } catch (e) { s = null; }
-  const existing = document.getElementById("specialSection");
+function syncSpecials() {
+  let specials;
+  try { specials = JSON.parse(localStorage.getItem("luckys_special")) || []; } catch (e) { specials = []; }
+  const existing = document.getElementById("specialsSection");
   if (existing) existing.remove();
-  if (!s || !s.active || !s.name) return;
+
+  const active = specials.filter(s => s.active && s.name);
+  if (active.length === 0) return;
 
   const section = document.createElement("section");
-  section.id = "specialSection";
-  section.className = "special";
-  section.innerHTML = `
-    <div class="special__ribbon">✦ Special of the Day ✦</div>
-    <div class="special__inner">
-      ${s.img ? `<div class="special__img"><img src="${s.img}" alt="${s.name}" /></div>` : ""}
-      <div class="special__info">
-        <h2 class="special__name">${s.name}</h2>
-        <p class="special__desc">${s.desc}</p>
-        <span class="special__price">₹ ${s.price}</span>
+  section.id = "specialsSection";
+  section.className = "specials";
+
+  const grid = active.map(s => `
+    <div class="specials__card">
+      ${s.img ? `<div class="specials__card-img"><img src="${s.img}" alt="${s.name}" /></div>` : ""}
+      <div class="specials__card-body">
+        <h3 class="specials__card-name">${s.name}</h3>
+        <p class="specials__card-desc">${s.desc}</p>
+        <span class="specials__card-price">₹ ${s.price}</span>
       </div>
     </div>
+  `).join("");
+
+  section.innerHTML = `
+    <div class="specials__ribbon">✦ Today's Specials ✦</div>
+    <div class="specials__grid">${grid}</div>
   `;
   const marquee = document.querySelector(".marquee");
   if (marquee) marquee.insertAdjacentElement("afterend", section);
 }
-syncSpecial();
+syncSpecials();
 
 /* ───────────────────────────────
    14. SAVE USER DATA TO BACKED
