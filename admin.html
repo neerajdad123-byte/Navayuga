@@ -87,8 +87,18 @@
 
     <!-- FESTIVAL OFFERS TAB -->
     <section class="admin-panel" id="tab-festival">
-      <h3>Festival / Seasonal Offers</h3>
-      <p style="color:var(--cream-dim);font-size:0.82rem;margin-bottom:1.5rem">Create a festive message and send it to all customers who shared their WhatsApp number.</p>
+      <h3>Festival / Seasonal WhatsApp Messages</h3>
+      <p style="color:var(--cream-dim);font-size:0.82rem;margin-bottom:1rem">Send festive offers to customers directly via WhatsApp.</p>
+
+      <div class="admin-info-box" style="margin-bottom:1.5rem">
+        <strong style="color:var(--saffron);font-size:0.78rem">📱 How to send messages (FREE):</strong>
+        <ol style="color:var(--cream-dim);font-size:0.75rem;margin:0.5rem 0 0 1rem;line-height:1.7">
+          <li><strong>Method 1 (Recommended):</strong> Copy all WhatsApp numbers below → Open WhatsApp Business app → Broadcast Lists → Create new list → Paste numbers → Send</li>
+          <li><strong>Method 2:</strong> Click individual "Send" links to open wa.me chat for each customer</li>
+          <li><strong>Method 3 (Advanced):</strong> Use <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/get-started" target="_blank" style="color:var(--saffron)">WhatsApp Cloud API</a> (1000 free messages/month)</li>
+        </ol>
+      </div>
+
       <form class="admin-form" id="festivalForm">
         <div class="admin-form__row">
           <label>Offer Title (e.g. "🎉 Diwali Special")</label>
@@ -96,13 +106,17 @@
         </div>
         <div class="admin-form__row">
           <label>Message</label>
-          <textarea id="festivalMsg" rows="3" placeholder="Wishing you a happy Diwali! Enjoy 20% off on all biryani orders this week. Visit us or order online." style="resize:vertical"></textarea>
+          <textarea id="festivalMsg" rows="4" placeholder="Wishing you a happy Diwali! Enjoy 20% off on all biryani orders this week. Visit us or order online." style="resize:vertical"></textarea>
         </div>
-        <button type="submit" class="admin-btn admin-btn--save">Save & Send to WhatsApp</button>
+        <button type="submit" class="admin-btn admin-btn--save">Generate WhatsApp Links</button>
       </form>
+
       <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;display:none" id="festivalPreview">
-        <h4 style="font-size:0.8rem;color:var(--cream-dim);margin-bottom:0.8rem">📤 WhatsApp numbers with offers:</h4>
-        <div id="festivalRecipients" style="max-height:200px;overflow-y:auto;font-size:0.78rem;color:var(--cream-dim)"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem">
+          <h4 style="font-size:0.8rem;color:var(--cream-dim)">📤 Recipients (<span id="festivalCount">0</span>)</h4>
+          <button class="admin-btn admin-btn--add" id="btnCopyNumbers" style="padding:0.4rem 0.8rem;font-size:0.7rem">📋 Copy All Numbers</button>
+        </div>
+        <div id="festivalRecipients" style="max-height:300px;overflow-y:auto;font-size:0.78rem;color:var(--cream-dim)"></div>
       </div>
     </section>
 

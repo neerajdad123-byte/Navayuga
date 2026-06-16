@@ -281,6 +281,17 @@ input, button { font-family: inherit; }
 }
 .admin-modal__close:hover { color: var(--rust); }
 
+/* ═══ INFO BOX ═══ */
+.admin-info-box {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+}
+.admin-info-box strong {
+  color: var(--saffron);
+}
+
 /* ═══ EMPTY STATE ═══ */
 .admin-empty {
   text-align: center;

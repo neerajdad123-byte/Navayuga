@@ -278,7 +278,7 @@ gsap.utils.toArray(".split-lines").forEach((block) => {
   });
 });
 
-// split-words blocks (story text, vision quote)
+// split-words blocks (story text)
 gsap.utils.toArray(".split-words").forEach((block) => {
   gsap.from(block.querySelectorAll(".word"), {
     opacity: 0.12, y: 14, duration: 0.6, stagger: 0.025, ease: "power2.out",
@@ -305,13 +305,6 @@ gsap.utils.toArray("[data-speed]").forEach((el) => {
     },
   });
 });
-
-// vision image parallax
-gsap.fromTo(".vision__img",
-  { yPercent: -12 },
-  { yPercent: 12, ease: "none",
-    scrollTrigger: { trigger: ".vision", start: "top bottom", end: "bottom top", scrub: true } }
-);
 
 /* ───────────────────────────────
    10. LOCAL TIME (footer clock)

@@ -401,31 +401,50 @@ festivalForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const title = document.getElementById("festivalTitle").value.trim();
   const msg = document.getElementById("festivalMsg").value.trim();
-  if (!title && !msg) return;
+  if (!title && !msg) { alert("Please enter a title or message."); return; }
 
-  const whatsappMsg = encodeURIComponent(`*${title || "Festival Offer"}*\n\n${msg}\n\n— Lucky's Biriyanihouse, Eluru`);
-
-  // Get all customers with WhatsApp numbers
+  const fullMsg = `*${title || "Festival Offer"}*\n\n${msg}\n\n— Lucky's Biriyanihouse, Eluru`;
+  const whatsappMsg = encodeURIComponent(fullMsg);
   const users = getUsers();
   const withWhatsapp = users.filter(u => u.whatsapp && u.whatsapp.trim());
+  
   if (withWhatsapp.length === 0) {
     alert("No customers with WhatsApp numbers found.");
     return;
   }
 
-  // Show preview of recipients
+  // Save for reuse
+  saveFestival({ title, msg });
+
+  // Show preview
   const preview = document.getElementById("festivalPreview");
   preview.style.display = "block";
-  const recipientDiv = document.getElementById("festivalRecipients");
-  recipientDiv.innerHTML = withWhatsapp.map((u, i) => 
-    `<div style="padding:0.4rem 0;border-bottom:1px solid var(--line)">${i+1}. ${u.name || "Unknown"} — <a href="https://wa.me/${u.whatsapp.replace(/\D/g,'')}?text=${whatsappMsg}" target="_blank" style="color:var(--saffron);text-decoration:underline">Send</a></div>`
-  ).join("");
+  document.getElementById("festivalCount").textContent = withWhatsapp.length;
 
-  // Open first one immediately as an example
+  const recipientDiv = document.getElementById("festivalRecipients");
+  recipientDiv.innerHTML = withWhatsapp.map((u, i) => {
+    const clean = u.whatsapp.replace(/\D/g,'');
+    return `<div style="padding:0.4rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">
+      <span>${i+1}. ${u.name || "Unknown"} — ${u.whatsapp}</span>
+      <a href="https://wa.me/${clean}?text=${whatsappMsg}" target="_blank" style="color:var(--saffron);text-decoration:underline;font-size:0.75rem">Send ↗</a>
+    </div>`;
+  }).join("");
+
+  // Set up copy all button
+  document.getElementById("btnCopyNumbers").onclick = () => {
+    const numbers = withWhatsapp.map(u => u.whatsapp.replace(/\D/g,'')).join(", ");
+    navigator.clipboard.writeText(numbers).then(() => {
+      alert(`Copied ${withWhatsapp.length} numbers to clipboard!\n\nPaste into WhatsApp Business → Broadcast Lists → New List → Add recipients manually.`);
+    }).catch(() => {
+      prompt("Copy these numbers:", numbers);
+    });
+  };
+
+  // Open first one as quick start
   const first = withWhatsapp[0];
   window.open(`https://wa.me/${first.whatsapp.replace(/\D/g,'')}?text=${whatsappMsg}`, "_blank");
 
-  alert(`Generated WhatsApp links for ${withWhatsapp.length} customers. Click "Send" next to each name to message them.`);
+  alert(`Generated WhatsApp links for ${withWhatsapp.length} customers.\n\n✅ Method 1 (Best): Click "Copy All Numbers", open WhatsApp Business app → Broadcast Lists → create new list → paste numbers.\n\n✅ Method 2: Click "Send" next to each customer to open wa.me chat.\n\n✅ Method 3: Use WhatsApp Cloud API (1000 free msgs/month).`);
   renderFestival();
 });
 
