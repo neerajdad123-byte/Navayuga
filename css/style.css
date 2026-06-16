@@ -396,6 +396,8 @@ em { font-family: var(--serif); font-style: italic; }
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 1rem;
+  text-decoration: none;
+  color: inherit;
   transition: border-color 0.3s, transform 0.3s;
 }
 .specials__card:hover { border-color: var(--saffron); transform: translateY(-2px); }
@@ -408,6 +410,8 @@ em { font-family: var(--serif); font-style: italic; }
 .specials__card-name { font-family: var(--serif); font-weight: 400; font-size: 1.05rem; color: var(--cream); margin-bottom: 0.3rem; }
 .specials__card-desc { font-size: 0.78rem; color: var(--cream-dim); line-height: 1.4; margin-bottom: 0.5rem; }
 .specials__card-price { font-family: var(--serif); font-size: 1rem; color: var(--saffron); }
+.specials__card-arrow { opacity: 0; transition: opacity 0.3s, transform 0.3s; display: inline-block; }
+.specials__card:hover .specials__card-arrow { opacity: 1; transform: translateX(3px); }
 
 @media (max-width: 700px) {
   .specials { padding: 2rem 1.4rem; }

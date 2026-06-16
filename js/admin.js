@@ -207,6 +207,8 @@ const editImg = document.getElementById("editImg");
 const editImgFile = document.getElementById("editImgFile");
 const editImgPreview = document.getElementById("editImgPreview");
 const editImgPreviewImg = document.getElementById("editImgPreviewImg");
+const editCategory = document.getElementById("editCategory");
+const specialCategoryRow = document.getElementById("specialCategoryRow");
 
 let pendingEditFileDataUrl = "";
 
@@ -327,6 +329,7 @@ function openEdit(index) {
     editPrice.value = "";
     editImg.value = "images/placeholder.jpg";
   }
+  specialCategoryRow.style.display = "none";
   editModal.classList.add("is-open");
 }
 
@@ -421,6 +424,7 @@ function openSpecialEdit(index) {
     editDesc.value = specials[index].desc;
     editPrice.value = specials[index].price;
     editImg.value = specials[index].img;
+    editCategory.value = specials[index].category || "";
   } else {
     document.getElementById("editTitle").textContent = "Add Special Item";
     editIndex.value = "special_new";
@@ -428,7 +432,9 @@ function openSpecialEdit(index) {
     editDesc.value = "";
     editPrice.value = "";
     editImg.value = "images/placeholder.jpg";
+    editCategory.value = "";
   }
+  specialCategoryRow.style.display = "flex";
   editModal.classList.add("is-open");
 
   // Hook file upload to special flow
@@ -451,7 +457,8 @@ editForm.addEventListener("submit", (e) => {
     e.stopImmediatePropagation();
     const specials = getSpecial();
     const imgUrl = pendingSpecialFileDataUrl || editImg.value.trim() || "images/placeholder.jpg";
-    const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, active: true };
+    const category = editCategory.value.trim();
+    const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, active: true, category };;
     if (!item.name || !item.price) return;
 
     if (idxVal === "special_new") {

@@ -156,6 +156,26 @@
           <input type="text" id="editImg" placeholder="images/dish1.jpg" />
           <span style="font-size:0.7rem;color:var(--cream-dim);display:block;margin-top:0.3rem">Paste a URL, or upload a file below</span>
         </div>
+        <div class="admin-form__row" id="specialCategoryRow" style="display:none">
+          <label>Menu Category (link to)</label>
+          <select id="editCategory" style="padding:0.75rem 1rem;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;color:var(--cream);font-size:0.9rem;outline:none">
+            <option value="">— Select —</option>
+            <option value="mutton-biryani">Mutton Biryani</option>
+            <option value="special-mutton">Special Mutton Biryani</option>
+            <option value="chicken-biryani">Chicken Biryani</option>
+            <option value="special-chicken">Special Chicken Biryani</option>
+            <option value="seafood-biryani">Sea Food Biryani</option>
+            <option value="veg-biryani">Veg Biryani</option>
+            <option value="nonveg-starters">Non Veg Starters</option>
+            <option value="veg-starters">Veg Starters</option>
+            <option value="veg-curries">Veg Curries</option>
+            <option value="nonveg-curries">Non Veg Curries</option>
+            <option value="rotis">Rotis</option>
+            <option value="rice">Rice</option>
+            <option value="rice-noodles">Rice / Noodles</option>
+            <option value="tandoori">Tandoori</option>
+          </select>
+        </div>
         <div class="admin-form__row">
           <label>Upload Image File</label>
           <input type="file" id="editImgFile" accept="image/*" />

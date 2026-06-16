@@ -482,14 +482,14 @@ function syncSpecials() {
   section.className = "specials";
 
   const grid = active.map(s => `
-    <div class="specials__card">
+    <a href="${s.category ? 'menu.html#' + s.category : 'menu.html'}" class="specials__card">
       ${s.img ? `<div class="specials__card-img"><img src="${s.img}" alt="${s.name}" /></div>` : ""}
       <div class="specials__card-body">
         <h3 class="specials__card-name">${s.name}</h3>
         <p class="specials__card-desc">${s.desc}</p>
-        <span class="specials__card-price">₹ ${s.price}</span>
+        <span class="specials__card-price">₹ ${s.price} <span class="specials__card-arrow">→</span></span>
       </div>
-    </div>
+    </a>
   `).join("");
 
   section.innerHTML = `

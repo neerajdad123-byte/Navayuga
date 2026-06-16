@@ -246,6 +246,18 @@ input, button { font-family: inherit; }
   font-size: 0.8rem;
   cursor: pointer;
 }
+.admin-form__row select {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--cream);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.admin-form__row select:focus { border-color: var(--saffron); }
 .admin-form__msg {
   font-size: 0.78rem;
   min-height: 1.2rem;
