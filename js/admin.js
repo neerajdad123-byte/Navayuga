@@ -1,7 +1,8 @@
 /* ═══════════ LUCKY'S BIRIYANIHOUSE ADMIN — admin.js ═══════════
    Now powered by db.js (Firebase cloud OR localStorage fallback).
-   Customers, orders & password sync across all devices when
-   Firebase is configured in config.js. */
+   Passwords are SHA-256 hashed — plaintext never stored on disk.
+   The hash below is the only thing inspectable; the actual password
+   is never in source code. */
 
 const PLACEHOLDER_IMG = "images/placeholder.svg";
 const DEFAULT_MENU = [
@@ -23,8 +24,8 @@ async function saveSpecials(l) { await db.saveSpecials(l); }
 async function getFestival() { return await db.getFestival(); }
 async function saveFestival(f) { await db.saveFestival(f); }
 async function getUsers()    { return await db.getCustomers(); }
-async function getPassword() { return await db.getPassword(); }
-async function setPassword(pw) { await db.setPassword(pw); }
+async function verifyPassword(pw) { return await db.verifyPassword(pw); }
+async function setPassword(pw)    { return await db.setPassword(pw); }
 async function getOrders()   { return await db.getOrders(); }
 
 /* ═══ DOM ═══ */
@@ -92,8 +93,8 @@ async function initLogin() {
   }
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const pw = await getPassword();
-    if (loginPassword.value === pw) {
+    const ok = await verifyPassword(loginPassword.value);
+    if (ok) {
       sessionStorage.setItem("luckys_admin", "1");
       showDash();
     } else {
@@ -424,7 +425,7 @@ passwordForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const cur = document.getElementById("currentPassword").value;
   const next = document.getElementById("newPassword").value;
-  if (cur !== await getPassword()) { passwordMsg.textContent = "Wrong password."; passwordMsg.style.color = "var(--rust)"; return; }
+  if (!await verifyPassword(cur)) { passwordMsg.textContent = "Wrong password."; passwordMsg.style.color = "var(--rust)"; return; }
   if (next.length < 4) { passwordMsg.textContent = "Minimum 4 chars."; passwordMsg.style.color = "var(--rust)"; return; }
   await setPassword(next);
   passwordMsg.textContent = "Password updated!"; passwordMsg.style.color = "var(--green)";

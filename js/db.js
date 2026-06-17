@@ -16,6 +16,14 @@
 
 const USE_FIREBASE = !!(FIREBASE_CONFIG && FIREBASE_CONFIG.projectId);
 
+/* ── SHA-256 helper (vanilla JS, no dependencies) ── */
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
 const STORAGE_KEYS = {
   menu:        "luckys_menu",
   specials:    "luckys_special",
@@ -179,11 +187,18 @@ const db = {
   },
 
   /* ─── CONVENIENCE: password ─── */
-  async getPassword() {
-    return await db.getSetting("password") || "luckys2024";
+  async getPasswordHash() {
+    return await db.getSetting("password_hash") || "6cabf56fe0e08cdc0a6d9a2c7a436d758e5ae258e5a9bfb17647e031d2195243";
   },
-  async setPassword(pw) {
-    return await db.setSetting("password", pw);
+  async verifyPassword(plaintext) {
+    const storedHash = await db.getPasswordHash();
+    const enteredHash = await sha256(plaintext);
+    return storedHash === enteredHash;
+  },
+  async setPassword(plaintext) {
+    // store only SHA-256 hash — plaintext never touches disk
+    const hash = await sha256(plaintext);
+    return await db.setSetting("password_hash", hash);
   },
 
   /* ─── CONVENIENCE: festival ─── */
