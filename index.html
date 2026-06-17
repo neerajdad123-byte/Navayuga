@@ -127,17 +127,17 @@
     <section class="reserve" id="visit">
       <span class="section-label reveal-line"><span>02 — Visit Us</span></span>
       <h2 class="reserve__title split-lines">Come hungry.<br/><em>Leave happy.</em></h2>
-      <a href="tel:+914000000000" class="reserve__btn magnetic" data-cursor="-hide">
+      <a href="tel:+914000000000" class="reserve__btn magnetic" data-cursor="-hide" id="reserveBtn">
         <span class="reserve__btn-fill"></span>
         <span class="reserve__btn-text">Reserve<br/>a Table</span>
       </a>
       <div class="reserve__info">
         <div class="reserve__info-block">
           <h4>Find us</h4>
-          <p>Main Road, Eluru<br/>West Godavari, Andhra Pradesh 534001</p>
+          <p id="reserveAddress">Main Road, Eluru<br/>West Godavari, Andhra Pradesh 534001</p>
           <div class="reserve__map-wrap">
-            <a href="https://www.google.com/maps/place/Lucky%E2%80%99s+Biryani+House/@16.710234,81.0935629,20z/data=!4m10!1m3!2m2!1sRestaurants!6e5!3m5!1s0x3a3615d8dded266f:0x27d1c73aa448c09e!8m2!3d16.7103308!4d81.0935041!16s%2Fg%2F11z6ybv_xc" target="_blank" rel="noopener" class="reserve__map-frame">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2065.625!2d81.0935041!3d16.7103308!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a3615d8dded266f%3A0x27d1c73aa448c09e!2sLucky's%20Biryani%20House!5e0!3m2!1sen!2sin!4v1718000000000" width="100%" height="200" style="border:0;border-radius:8px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <a href="https://www.google.com/maps/place/Lucky%E2%80%99s+Biryani+House/@16.710234,81.0935629,20z/data=!4m10!1m3!2m2!1sRestaurants!6e5!3m5!1s0x3a3615d8dded266f:0x27d1c73aa448c09e!8m2!3d16.7103308!4d81.0935041!16s%2Fg%2F11z6ybv_xc" target="_blank" rel="noopener" class="reserve__map-frame" id="reserveMapLink">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2065.625!2d81.0935041!3d16.7103308!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a3615d8dded266f%3A0x27d1c73aa448c09e!2sLucky's%20Biryani%20House!5e0!3m2!1sen!2sin!4v1718000000000" width="100%" height="200" style="border:0;border-radius:8px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" id="reserveMapIframe"></iframe>
               <span class="reserve__map-overlay">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 Open in Google Maps ↗
@@ -147,11 +147,11 @@
         </div>
         <div class="reserve__info-block">
           <h4>Hours</h4>
-          <p>Tuesday — 9 am–10 pm<br/>Wednesday — 9 am–10 pm<br/>Thursday — 9 am–10 pm<br/>Friday — 9 am–10 pm<br/>Saturday — 9 am–10 pm<br/>Sunday — 9 am–10 pm<br/>Monday — 9 am–10 pm</p>
+          <p id="reserveHours">9:00 AM – 10:00 PM, every day</p>
         </div>
         <div class="reserve__info-block">
           <h4>Speak to us</h4>
-          <p>+91 40 0000 0000<br/>hello@luckysbiriyanihouse.in</p>
+          <p id="reserveContact">+91 40 0000 0000<br/>hello@luckysbiriyanihouse.in</p>
         </div>
       </div>
     </section>
@@ -195,14 +195,12 @@
   <!-- ════════ FOOTER ════════ -->
   <footer class="footer">
     <div class="footer__top">
-      <nav class="footer__links">
-        <a href="#" class="footer__link magnetic" data-cursor="-sm">Instagram</a>
-        <a href="#" class="footer__link magnetic" data-cursor="-sm">Zomato</a>
-        <a href="https://www.google.com/maps/place/Lucky%E2%80%99s+Biryani+House/@16.710234,81.0935629,20z/data=!4m10!1m3!2m2!1sRestaurants!6e5!3m5!1s0x3a3615d8dded266f:0x27d1c73aa448c09e!8m2!3d16.7103308!4d81.0935041!16s%2Fg%2F11z6ybv_xc" class="footer__link magnetic" data-cursor="-sm" target="_blank" rel="noopener">Google Maps</a>
+      <nav class="footer__links" id="footerLinks">
+        <!-- social links injected from config.js -->
       </nav>
       <div class="footer__meta">
         <span>Eluru — <span id="localTime">00:00</span> IST</span>
-        <span>© 2026 Lucky's Biriyanihouse. All flavours reserved.</span>
+        <span id="footerCopyright">© 2026 Lucky's Biriyanihouse. All flavours reserved.</span>
       </div>
     </div>
     <div class="footer__logo-wrap">
@@ -215,6 +213,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
   <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+  <!-- shared modules -->
+  <script src="js/config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

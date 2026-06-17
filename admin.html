@@ -32,7 +32,8 @@
     </header>
 
     <nav class="admin-tabs">
-      <button class="admin-tabs__btn active" data-tab="menu">Menu</button>
+      <button class="admin-tabs__btn active" data-tab="orders">Orders</button>
+      <button class="admin-tabs__btn" data-tab="menu">Menu</button>
       <button class="admin-tabs__btn" data-tab="special">Special of the Day</button>
       <button class="admin-tabs__btn" data-tab="festival">Festival Offers</button>
       <button class="admin-tabs__btn" data-tab="birthdays">Birthdays</button>
@@ -40,8 +41,20 @@
       <button class="admin-tabs__btn" data-tab="settings">Settings</button>
     </nav>
 
+    <div class="admin-status" id="adminStatus" style="padding:0.6rem 1.2rem;font-size:0.72rem;letter-spacing:0.05em;border-bottom:1px solid var(--line)"></div>
+
+    <!-- ORDERS TAB -->
+    <section class="admin-panel active" id="tab-orders">
+      <div class="admin-panel__head">
+        <h3>Recent Orders</h3>
+        <button class="admin-btn admin-btn--add" id="btnRefreshOrders">↻ Refresh</button>
+      </div>
+      <p style="color:var(--cream-dim);font-size:0.78rem;margin-bottom:1.2rem">Orders placed via the cart (WhatsApp orders). Newest first.</p>
+      <div class="admin-list" id="ordersList"></div>
+    </section>
+
     <!-- MENU TAB -->
-    <section class="admin-panel active" id="tab-menu">
+    <section class="admin-panel" id="tab-menu">
       <div class="admin-panel__head">
         <h3>Menu Items</h3>
         <button class="admin-btn admin-btn--add" id="btnAddItem">+ Add Item</button>
@@ -115,6 +128,7 @@
     <!-- SETTINGS TAB -->
     <section class="admin-panel" id="tab-settings">
       <h3>Change Password</h3>
+      <p style="color:var(--cream-dim);font-size:0.78rem;margin-bottom:1rem">Note: password is stored in the database. Anyone who can open the live site can see it in the source — for a real lock, ask me about Vercel password protection.</p>
       <form class="admin-form" id="passwordForm">
         <div class="admin-form__row">
           <label>Current Password</label>
@@ -126,6 +140,26 @@
         </div>
         <button type="submit" class="admin-btn admin-btn--save">Update Password</button>
         <p class="admin-form__msg" id="passwordMsg"></p>
+      </form>
+
+      <hr style="border:none;border-top:1px solid var(--line);margin:2.5rem 0" />
+
+      <h3>WhatsApp Business API (Optional — for automatic messages)</h3>
+      <p style="color:var(--cream-dim);font-size:0.78rem;margin-bottom:1rem">
+        For AUTOMATIC birthday & festival WhatsApp messages. Leave blank to use the free one-click manual sending (recommended to start).
+        Get these from <a href="https://business.whatsapp.com/" target="_blank" style="color:var(--saffron)">WhatsApp Business Platform</a>.
+      </p>
+      <form class="admin-form" id="whatsappApiForm">
+        <div class="admin-form__row">
+          <label>Phone Number ID</label>
+          <input type="text" id="waPhoneNumberId" placeholder="e.g. 123456789" />
+        </div>
+        <div class="admin-form__row">
+          <label>Access Token</label>
+          <input type="password" id="waAccessToken" placeholder="Your permanent access token" />
+        </div>
+        <button type="submit" class="admin-btn admin-btn--save">Save API Keys</button>
+        <p class="admin-form__msg" id="whatsappMsg"></p>
       </form>
     </section>
   </div>
@@ -188,6 +222,10 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="js/db.js"></script>
   <script src="js/admin.js"></script>
 </body>
 </html>

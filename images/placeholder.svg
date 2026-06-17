@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f0ebe3"/>
+  <circle cx="200" cy="165" r="58" fill="none" stroke="#c47a1a" stroke-width="3"/>
+  <path d="M200 107 a58 58 0 0 1 50 30 a40 40 0 0 1 8 28 a58 58 0 0 1 -116 0 a40 40 0 0 1 8 -28 a58 58 0 0 1 50 -30 z" fill="none" stroke="#c47a1a" stroke-width="2.5"/>
+  <text x="200" y="280" font-family="Georgia, serif" font-size="26" fill="#c47a1a" text-anchor="middle" font-style="italic">Lucky's</text>
+  <text x="200" y="310" font-family="Arial, sans-serif" font-size="11" fill="#a89a85" text-anchor="middle" letter-spacing="3">BIRIYANIHOUSE</text>
+</svg>

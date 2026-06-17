@@ -89,21 +89,26 @@ document.querySelectorAll(".split-lines .line").forEach((line) => {
 });
 
 /* ───────────────────────────────
-   3. PRELOADER
+   3. PRELOADER  (plays ONCE per browser session, not every navigation)
 ─────────────────────────────── */
 const preloader = document.getElementById("preloader");
 const counterEl = document.getElementById("counter");
 const words = gsap.utils.toArray(".preloader__word");
+
+// Already shown earlier this session? Skip the whole animation.
+const PRELOADER_SESSION_KEY = "luckys_preloader_done";
 
 function startSite() {
   lenis.start();
   heroIntro();
 }
 
-if (prefersReduced) {
+if (prefersReduced || sessionStorage.getItem(PRELOADER_SESSION_KEY)) {
   preloader.style.display = "none";
   startSite();
 } else {
+  // mark as seen so it won't replay when navigating back to home
+  sessionStorage.setItem(PRELOADER_SESSION_KEY, "1");
   const tl = gsap.timeline({
     onComplete: () => {
       preloader.style.display = "none";
@@ -324,9 +329,8 @@ updateTime();
 setInterval(updateTime, 30000);
 
 /* ───────────────────────────────
-   11. CART SYSTEM
+   11. CART SYSTEM  (shared across pages via cart.js)
 ─────────────────────────────── */
-const cart = [];
 const cartToggle = document.getElementById("cartToggle");
 const cartEl = document.getElementById("cart");
 const cartOverlay = document.getElementById("cartOverlay");
@@ -351,14 +355,10 @@ cartToggle.addEventListener("click", openCart);
 cartClose.addEventListener("click", closeCart);
 cartOverlay.addEventListener("click", closeCart);
 
-renderCart();
-
 function renderCart() {
-  cartItems.innerHTML = "";
-  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const count = cart.reduce((sum, item) => sum + item.qty, 0);
-
-  cartCount.textContent = count;
+  const cart = CART.get();
+  const total = CART.total();
+  cartCount.textContent = CART.count();
   cartCount.classList.add("bump");
   setTimeout(() => cartCount.classList.remove("bump"), 300);
 
@@ -368,10 +368,8 @@ function renderCart() {
   } else {
     cartEmpty.style.display = "none";
     cartFooter.style.display = "block";
-    cart.forEach((item, i) => {
-      const li = document.createElement("li");
-      li.className = "cart__item";
-      li.innerHTML = `
+    cartItems.innerHTML = cart.map((item, i) => `
+      <li class="cart__item">
         <div class="cart__item-info">
           <div class="cart__item-name">${item.name}</div>
           <div class="cart__item-price">₹ ${item.price} each</div>
@@ -382,42 +380,27 @@ function renderCart() {
           <button data-qty-inc="${i}">+</button>
         </div>
         <button class="cart__item-remove" data-remove="${i}">&times;</button>
-      `;
-      cartItems.appendChild(li);
-    });
+      </li>
+    `).join("");
   }
   cartTotal.textContent = `₹ ${total}`;
 }
+
+// keep cart UI in sync across pages and browser tabs
+CART.subscribe(renderCart);
 
 cartItems.addEventListener("click", (e) => {
   const incBtn = e.target.closest("[data-qty-inc]");
   const decBtn = e.target.closest("[data-qty-dec]");
   const removeBtn = e.target.closest("[data-remove]");
-
-  if (incBtn) {
-    const i = parseInt(incBtn.dataset.qtyInc, 10);
-    cart[i].qty++;
-    renderCart();
-  }
-  if (decBtn) {
-    const i = parseInt(decBtn.dataset.qtyDec, 10);
-    cart[i].qty--;
-    if (cart[i].qty <= 0) cart.splice(i, 1);
-    renderCart();
-  }
-  if (removeBtn) {
-    const i = parseInt(removeBtn.dataset.remove, 10);
-    cart.splice(i, 1);
-    renderCart();
-  }
+  if (incBtn) CART.inc(parseInt(incBtn.dataset.qtyInc, 10));
+  if (decBtn) CART.dec(parseInt(decBtn.dataset.qtyDec, 10));
+  if (removeBtn) CART.remove(parseInt(removeBtn.dataset.remove, 10));
 });
 
 cartCheckout.addEventListener("click", () => {
-  if (cart.length === 0) return;
-  const msg = encodeURIComponent(
-    `Hi Lucky's Biriyanihouse! I'd like to order:\n${cart.map(c => `  ${c.qty}x ${c.name} — ₹${c.price * c.qty}`).join("\n")}\n\nTotal: ₹${cart.reduce((s, i) => s + i.price * i.qty, 0)}`
-  );
-  window.open(`https://wa.me/914000000000?text=${msg}`, "_blank");
+  if (CART.get().length === 0) return;
+  CART.checkout();
 });
 
 /* ───────────────────────────────
@@ -445,7 +428,7 @@ function closePopup() {
   sessionStorage.setItem("luckys_popup_seen", "1");
 }
 
-userPopupForm.addEventListener("submit", (e) => {
+userPopupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("popupName").value.trim();
   const whatsapp = document.getElementById("popupWhatsapp").value.trim();
@@ -453,12 +436,13 @@ userPopupForm.addEventListener("submit", (e) => {
   if (!name) return;
 
   const userData = { name, whatsapp, birthday, time: new Date().toLocaleString("en-IN") };
+  // local cache so checkout can attach this customer to the order
   localStorage.setItem(STORAGE_USER, JSON.stringify(userData));
 
-  const STORAGE_USERS = "luckys_users";
-  const users = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; } catch (e) { return []; } })();
-  users.push(userData);
-  localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+  // save to the real data layer (cloud if configured, else local)
+  if (window.DB) {
+    try { await DB.init(); await DB.addCustomer(userData); } catch (err) {}
+  }
 
   closePopup();
 });
@@ -466,11 +450,17 @@ userPopupForm.addEventListener("submit", (e) => {
 popupSkip.addEventListener("click", closePopup);
 
 /* ───────────────────────────────
-   13. SPECIAL ITEMS (injected)
+   13. SPECIAL ITEMS (injected) — reads from db.js
 ─────────────────────────────── */
-function syncSpecials() {
-  let specials;
-  try { specials = JSON.parse(localStorage.getItem("luckys_special")) || []; } catch (e) { specials = []; }
+async function syncSpecials() {
+  let specials = [];
+  if (window.DB) {
+    try { await DB.init(); specials = await DB.getSpecials(); } catch (e) { specials = []; }
+  }
+  // legacy fallback
+  if (!specials.length) {
+    try { specials = JSON.parse(localStorage.getItem("luckys_special")) || []; } catch (e) { specials = []; }
+  }
   const existing = document.getElementById("specialsSection");
   if (existing) existing.remove();
 
@@ -502,23 +492,47 @@ function syncSpecials() {
 syncSpecials();
 
 /* ───────────────────────────────
-   14. SAVE USER DATA TO BACKED
+   14. POPULATE CONTACT / HOURS / FOOTER FROM config.js
 ─────────────────────────────── */
-function appendToBackedFile(userData) {
-  try {
-    let backed = JSON.parse(localStorage.getItem("luckys_backed_users")) || [];
-    backed.push({ ...userData, savedAt: new Date().toISOString() });
-    localStorage.setItem("luckys_backed_users", JSON.stringify(backed));
-  } catch (e) {}
+function applyConfig() {
+  if (!window.SITE_CONFIG) return;
+  const c = SITE_CONFIG;
+
+  // footer social + copyright
+  const social = c.social || {};
+  const links = [];
+  if (social.instagram) links.push(`<a href="${social.instagram}" target="_blank" rel="noopener" class="footer__link magnetic" data-cursor="-sm">Instagram</a>`);
+  if (social.zomato) links.push(`<a href="${social.zomato}" target="_blank" rel="noopener" class="footer__link magnetic" data-cursor="-sm">Zomato</a>`);
+  if (social.swiggy) links.push(`<a href="${social.swiggy}" target="_blank" rel="noopener" class="footer__link magnetic" data-cursor="-sm">Swiggy</a>`);
+  if (social.facebook) links.push(`<a href="${social.facebook}" target="_blank" rel="noopener" class="footer__link magnetic" data-cursor="-sm">Facebook</a>`);
+  if (c.mapLink) links.push(`<a href="${c.mapLink}" target="_blank" rel="noopener" class="footer__link magnetic" data-cursor="-sm">Google Maps</a>`);
+  const fl = document.getElementById("footerLinks");
+  if (fl) fl.innerHTML = links.join("") || `<a href="#" class="footer__link">Lucky's</a>`;
+  const copy = document.getElementById("footerCopyright");
+  if (copy) copy.textContent = `© ${new Date().getFullYear()} ${c.name}. All flavours reserved.`;
+
+  // reserve section
+  const addr = document.getElementById("reserveAddress");
+  if (addr && c.address) addr.innerHTML = c.address.replace(/,\s*/g, "<br/>");
+
+  const hours = document.getElementById("reserveHours");
+  if (hours) {
+    const closed = (c.hours.closedDays || []).join(" & ");
+    hours.textContent = `${c.hours.open} – ${c.hours.close}${closed ? ", closed " + closed : ", open every day"}`;
+  }
+
+  const contact = document.getElementById("reserveContact");
+  if (contact) contact.innerHTML = `${c.phoneDisplay}<br/>${c.email}`;
+
+  const reserveBtn = document.getElementById("reserveBtn");
+  if (reserveBtn && c.phoneDial) reserveBtn.href = `tel:${c.phoneDial}`;
+
+  const mapLink = document.getElementById("reserveMapLink");
+  if (mapLink && c.mapLink) mapLink.href = c.mapLink;
+  const mapIframe = document.getElementById("reserveMapIframe");
+  if (mapIframe && c.mapEmbed) mapIframe.src = c.mapEmbed;
 }
-// Hook into existing user form submission — intercept after the original handler
-const origSubmitHandler = userPopupForm.onsubmit;
-userPopupForm.addEventListener("submit", (e) => {
-  setTimeout(() => {
-    const data = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_USER)); } catch (e) { return null; } })();
-    if (data) appendToBackedFile(data);
-  }, 100);
-});
+applyConfig();
 
 /* ───────────────────────────────
    15. REFRESH ON RESIZE / LOAD
