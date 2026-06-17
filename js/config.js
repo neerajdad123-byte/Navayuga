@@ -19,4 +19,12 @@
       appId:           "",                                    //  ← paste yours
    };                                                         //
    ═══════════════════════════════════════════════════════════ */
-const FIREBASE_CONFIG = {};
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCCNC4Vrt4oj3TPYVoXgNcZveqxV7ruug8",
+  authDomain: "lucky-s-biriyani.firebaseapp.com",
+  projectId: "lucky-s-biriyani",
+  storageBucket: "lucky-s-biriyani.firebasestorage.app",
+  messagingSenderId: "876383464430",
+  appId: "1:876383464430:web:0dc3110c5291454140fcff",
+  measurementId: "G-SSZ0Q1MRN8"
+};
