@@ -22,14 +22,6 @@ themeSwitch.innerHTML = `
 `;
 document.body.appendChild(themeSwitch);
 
-/* Admin entry button */
-const adminBtn = document.createElement('a');
-adminBtn.href = 'admin.html';
-adminBtn.className = 'admin-entry-btn';
-adminBtn.setAttribute('aria-label', 'Admin');
-adminBtn.textContent = '⚙';
-document.body.appendChild(adminBtn);
-
 const moonIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
 const sunIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
 
