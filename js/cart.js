@@ -55,16 +55,23 @@ const CART = (() => {
   /* ── CHECKOUT: WhatsApp + save to db.js ── */
   async function checkout() {
     if (!items.length) return;
+
+    // ── After-hours notice (9am–10pm IST) ──
+    const istDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+    const istHour = new Date(istDate).getHours();
+    const isAfterHours = istHour < 9 || istHour >= 22;
+
     const wa = (window.SITE_CONFIG && SITE_CONFIG.whatsapp) || "914000000000";
-    const msg = encodeURIComponent(
-      "Hi " + (window.SITE_CONFIG?.name || "Lucky's") + "! I'd like to order:\n" +
-      items.map(c => `  ${c.qty}x ${c.name} — ₹${c.price * c.qty}`).join("\n") +
-      `\n\nTotal: ₹${total()}`
-    );
-    // open WhatsApp chat
+    const baseMsg = items.map(c => `  ${c.qty}x ${c.name} — ₹${c.price * c.qty}`).join("\n");
+    const msg = isAfterHours
+      ? encodeURIComponent(`🌙 AFTER-HOURS ORDER\n\nHi Lucky's! Placing an order for tomorrow:\n${baseMsg}\n\nTotal: ₹${total()}\n\n(Ordered after hours — please process when you open)` )
+      : encodeURIComponent(`Hi Lucky's! I'd like to order:\n${baseMsg}\n\nTotal: ₹${total()}`);
+
+    if (isAfterHours) {
+      alert("🌙 It's currently outside opening hours (9 am – 10 pm).\n\nYour order will still be sent to Lucky's and processed when they open. Thank you!");
+    }
     window.open(`https://wa.me/${wa}?text=${msg}`, "_blank");
 
-    // save order to db.js (cloud or local)
     if (window.db) {
       try {
         const customer = JSON.parse(localStorage.getItem("luckys_user_info")) || null;
@@ -78,7 +85,14 @@ const CART = (() => {
     }
   }
 
-  return { add, inc, dec, remove, clear, get, count, total, checkout, subscribe };
+  /* ── PUBLIC: check if currently open ── */
+  function isOpen() {
+    const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+    const h = new Date(now).getHours();
+    return h >= 9 && h < 22;
+  }
+
+  return { add, inc, dec, remove, clear, get, count, total, checkout, subscribe, isOpen };
 })();
 
 window.CART = CART;

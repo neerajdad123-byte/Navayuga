@@ -1,23 +1,11 @@
 /* ═══════════ LUCKY'S BIRIYANIHOUSE ADMIN — admin.js ═══════════
    Now powered by db.js (Firebase cloud OR localStorage fallback).
    Passwords are SHA-256 hashed — plaintext never stored on disk.
-   The hash below is the only thing inspectable; the actual password
-   is never in source code. */
+   Menu data sourced from menu-data.js (shared with menu.html). */
 
-const PLACEHOLDER_IMG = "images/placeholder.svg";
-const DEFAULT_MENU = [
-  { name: "Mutton Biryani Single", desc: "A generous single portion of slow-cooked mutton and fragrant basmati", price: 220, img: PLACEHOLDER_IMG },
-  { name: "Mutton Biryani Full", desc: "Full plate — two pieces of tender mutton, sealed with dough and baked", price: 380, img: PLACEHOLDER_IMG },
-  { name: "Chicken Biryani Single", desc: "One piece of juicy chicken, perfectly spiced for a solo indulgence", price: 160, img: PLACEHOLDER_IMG },
-  { name: "Chicken Biryani Full", desc: "Two pieces of chicken, sealed and slow-cooked in dum style", price: 280, img: PLACEHOLDER_IMG },
-  { name: "Butter Chicken", desc: "Classic butter chicken curry", price: 240, img: PLACEHOLDER_IMG },
-  { name: "Rumali Roti", desc: "Thin, soft handkerchief bread", price: 15, img: PLACEHOLDER_IMG },
-  { name: "Butter Naan", desc: "Naan topped with butter", price: 40, img: PLACEHOLDER_IMG },
-];
-
-// DEFAULT_MENU is the backup when db is empty (defined in admin.js, not db.js)
+// DEFAULT_MENU comes from menu-data.js (loaded before this script)
 // data helpers use db.js
-async function getMenu()     { const m = await db.getMenu();     return m.length ? m : structuredClone(DEFAULT_MENU); }
+async function getMenu()     { const m = await db.getMenu();     return m.length ? m : structuredClone(window.MENU_DATA || []); }
 async function saveMenu(m)   { await db.saveMenu(m); }
 async function getSpecials() { return await db.getSpecials(); }
 async function saveSpecials(l) { await db.saveSpecials(l); }
