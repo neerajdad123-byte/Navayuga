@@ -81,12 +81,18 @@ async function initLogin() {
   }
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const ok = await verifyPassword(loginPassword.value);
-    if (ok) {
-      sessionStorage.setItem("luckys_admin", "1");
-      showDash();
-    } else {
-      loginError.textContent = "Wrong password.";
+    loginError.textContent = "";
+    try {
+      const ok = await verifyPassword(loginPassword.value);
+      if (ok) {
+        sessionStorage.setItem("luckys_admin", "1");
+        showDash();
+      } else {
+        loginError.textContent = "Wrong password. Default is: admin";
+      }
+    } catch (err) {
+      loginError.textContent = "Error: " + err.message;
+      console.error("Login error:", err);
     }
   });
 }

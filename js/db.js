@@ -25,14 +25,15 @@ async function sha256(message) {
 }
 
 const STORAGE_KEYS = {
-  menu:        "luckys_menu",
-  specials:    "luckys_special",
-  users:       "luckys_users",
-  backedUsers: "luckys_backed_users",
-  password:    "luckys_admin_password",
-  festival:    "luckys_festival",
-  whatsapp:    "luckys_whatsapp_api",
-  orders:      "luckys_orders",
+  menu:          "luckys_menu",
+  specials:      "luckys_special",
+  users:         "luckys_users",
+  backedUsers:   "luckys_backed_users",
+  password:      "luckys_admin_password",
+  password_hash: "luckys_admin_password",
+  festival:      "luckys_festival",
+  whatsapp:      "luckys_whatsapp_api",
+  orders:        "luckys_orders",
 };
 
 /* ── Local helpers ── */
@@ -171,8 +172,12 @@ const db = {
   async getSetting(key) {
     const fs = _firestore();
     if (fs) {
-      const doc = await fs.collection("settings").doc(key).get();
-      return doc.exists ? doc.data().value : null;
+      try {
+        const doc = await fs.collection("settings").doc(key).get();
+        if (doc.exists) return doc.data().value;
+      } catch (e) {
+        console.warn("Firestore read failed for", key, e);
+      }
     }
     return _lsGet(STORAGE_KEYS[key], null);
   },
@@ -188,7 +193,17 @@ const db = {
 
   /* ─── CONVENIENCE: password ─── */
   async getPasswordHash() {
-    return await db.getSetting("password_hash") || "6cabf56fe0e08cdc0a6d9a2c7a436d758e5ae258e5a9bfb17647e031d2195243";
+    const fromSetting = await db.getSetting("password_hash");
+    if (fromSetting) return fromSetting;
+    try {
+      const legacy = localStorage.getItem("undefined");
+      if (legacy) { const p = JSON.parse(legacy); if (typeof p === "string" && p.length === 64) return p; }
+    } catch {}
+    try {
+      const plain = localStorage.getItem("luckys_admin_password");
+      if (plain) { const p = JSON.parse(plain); if (p && typeof p === "string" && p.length < 64) return await sha256(p); }
+    } catch {}
+    return "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
   },
   async verifyPassword(plaintext) {
     const storedHash = await db.getPasswordHash();
@@ -196,7 +211,6 @@ const db = {
     return storedHash === enteredHash;
   },
   async setPassword(plaintext) {
-    // store only SHA-256 hash — plaintext never touches disk
     const hash = await sha256(plaintext);
     return await db.setSetting("password_hash", hash);
   },
