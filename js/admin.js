@@ -128,6 +128,15 @@ async function showDash() {
   // Seed the menu on first use so the admin list matches menu.html.
   try { await ensureMenuSeeded(); } catch (e) { console.warn("seed skipped", e); }
   renderAll();
+  // Keep the admin lists in sync with the cloud in real time: if a special or
+  // menu item is added/edited/deleted (here or on another device), the admin
+  // panels refresh automatically instead of going stale.
+  if (window.db && typeof db.onMenuChange === "function") {
+    db.onMenuChange(() => renderMenu());
+  }
+  if (window.db && typeof db.onSpecialsChange === "function") {
+    db.onSpecialsChange(() => renderSpecial());
+  }
 }
 
 /* ═══ TABS ═══ */
@@ -295,14 +304,25 @@ async function deleteItem(index) {
 
 /* ═══ SPECIAL ITEMS ═══ */
 async function renderSpecial() {
-  const specials = await getSpecials();
+  let specials;
+  try { specials = await getSpecials(); }
+  catch (e) { console.error("getSpecials failed", e); specials = []; }
   if (!specials || specials.length === 0) {
     specialList.innerHTML = '<div class="admin-empty">No special items yet. Add one above.</div>';
     return;
   }
+  // Be defensive about missing fields so a bad record never blanks the list.
+  specials = specials.map(s => ({
+    name:  (s && s.name)  ? String(s.name)  : "(untitled)",
+    desc:  (s && s.desc)  ? String(s.desc)  : "",
+    price: (s && s.price != null) ? s.price : 0,
+    img:   (s && s.img)   ? String(s.img)   : "images/placeholder.svg",
+    active: !!(s && s.active),
+    category: (s && s.category) ? String(s.category) : "",
+  }));
   specialList.innerHTML = specials.map((item, i) => `
     <div class="admin-list__item">
-      <img src="${item.img}" alt="${item.name}" />
+      <img src="${item.img}" alt="${item.name}" onerror="this.src='images/placeholder.svg'" />
       <div class="admin-list__item-info">
         <div class="admin-list__item-name">${item.name} ${item.active ? '<span class="admin-badge" style="background:var(--green);margin-left:0.4rem">Active</span>' : '<span class="admin-badge" style="background:var(--cream-dim);margin-left:0.4rem">Inactive</span>'}</div>
         <div class="admin-list__item-desc">${item.desc}</div>
@@ -319,6 +339,7 @@ async function renderSpecial() {
     btn.addEventListener("click", async () => {
       const i = parseInt(btn.dataset.stoggle);
       const specials = await getSpecials();
+      if (!specials[i]) return;
       specials[i].active = !specials[i].active;
       await saveSpecials(specials);
       renderSpecial();

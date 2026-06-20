@@ -210,6 +210,48 @@
       border-bottom: 2px solid var(--saffron);
       scroll-margin-top: 130px;
     }
+
+    /* ── SPECIAL ITEMS (admin-managed "Today's Specials") ── */
+    .specials-banner {
+      text-align: center; margin-bottom: 1.5rem;
+      font-family: var(--serif); color: var(--saffron);
+      font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .specials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem; margin-bottom: 4rem;
+    }
+    .special-card {
+      background: var(--bg-2); border: 1px solid var(--line);
+      border-radius: 12px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .special-card:hover {
+      transform: translateY(-4px); border-color: var(--saffron);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .special-card__img { width: 100%; height: 160px; overflow: hidden; background: var(--bg-3); }
+    .special-card__img img { width: 100%; height: 100%; object-fit: cover; }
+    .special-card__body { padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+    .special-card__name { font-family: var(--serif); font-weight: 400; font-size: 1.15rem; color: var(--cream); }
+    .special-card__desc { font-size: 0.82rem; color: var(--cream-dim); line-height: 1.5; flex: 1; }
+    .special-card__foot {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 0.4rem; gap: 1rem;
+    }
+    .special-card__price { font-family: var(--serif); font-size: 1.15rem; color: var(--saffron); white-space: nowrap; }
+    .special-card__add {
+      font-family: var(--sans);
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.5rem 1.1rem; border-radius: 50px; cursor: pointer;
+      background: var(--saffron); color: var(--bg); border: none;
+      transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap;
+    }
+    .special-card__add:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(196,122,26,0.4); }
+    .special-card__add.added { background: var(--green); }
+    @media (max-width: 600px) { .specials-grid { grid-template-columns: 1fr; } }
     .menu-section__icon {
       width: 40px; height: 40px; border-radius: 50%;
       background: var(--saffron);
@@ -475,6 +517,7 @@
 
   <!-- STICKY CATEGORY NAV -->
   <nav class="cat-nav" id="catNav">
+    <button class="cat-nav__btn" data-target="specialsBlock">✦ Specials</button>
     <button class="cat-nav__btn active" data-target="mutton-biryani">Mutton Biryani</button>
     <button class="cat-nav__btn" data-target="special-mutton">Special Mutton</button>
     <button class="cat-nav__btn" data-target="chicken-biryani">Chicken Biryani</button>
@@ -669,6 +712,72 @@
         db.onMenuChange(() => renderMenu());
       }
     });
+
+    // ════════ SPECIAL ITEMS (Today's Specials) ════════
+    // Renders the active specials saved by the admin as a card grid above the
+    // regular menu, each with an "Add" button. Live-subscribes so a special
+    // added/edited/toggled/deleted in the admin panel appears here instantly.
+    async function renderSpecials() {
+      const root = document.getElementById('menuRoot');
+      if (!root) return;
+      // remove any previously injected specials block
+      const old = document.getElementById('specialsBlock');
+      if (old) old.remove();
+
+      let specials = [];
+      try {
+        if (window.db) specials = await db.getSpecials();
+      } catch (e) { console.warn('getSpecials failed', e); specials = []; }
+      const active = (specials || []).filter(s => s && s.active && s.name);
+      if (active.length === 0) return; // nothing to show — hide the block
+
+      const cards = active.map((s, i) => `
+        <article class="special-card">
+          ${s.img ? `<div class="special-card__img"><img src="${s.img}" alt="${escapeHtml(s.name)}" onerror="this.parentElement.style.display='none'" /></div>` : ''}
+          <div class="special-card__body">
+            <h3 class="special-card__name">${escapeHtml(s.name)}</h3>
+            ${s.desc ? `<p class="special-card__desc">${escapeHtml(s.desc)}</p>` : ''}
+            <div class="special-card__foot">
+              <span class="special-card__price">₹ ${s.price || 0}</span>
+              <button class="special-card__add" data-sadd="${i}">Add</button>
+            </div>
+          </div>
+        </article>`).join('');
+
+      const block = document.createElement('section');
+      block.id = 'specialsBlock';
+      block.className = 'menu-section';
+      block.style.scrollMarginTop = '130px';
+      block.innerHTML = `
+        <div class="menu-section__header">
+          <div class="menu-section__icon">✦</div>
+          <h2 class="menu-section__title">Today's Specials</h2>
+          <span class="menu-section__count">${active.length} items</span>
+        </div>
+        <div class="specials-grid">${cards}</div>
+      `;
+      // Insert at the very top of the menu so specials are seen first.
+      root.insertBefore(block, root.firstChild);
+
+      // Bind Add buttons → cart.
+      block.querySelectorAll('[data-sadd]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const item = active[parseInt(btn.dataset.sadd, 10)];
+          if (!item) return;
+          CART.add(item.name, item.price);
+          btn.classList.add('added');
+          const q = CART.get().find(c => c.name === item.name)?.qty || 1;
+          btn.textContent = q + 'x';
+          setTimeout(() => { btn.classList.remove('added'); btn.textContent = 'Add'; }, 800);
+        });
+      });
+    }
+
+    // Render now and subscribe to live changes.
+    renderSpecials();
+    if (window.db && typeof db.onSpecialsChange === 'function') {
+      db.onSpecialsChange(() => renderSpecials());
+    }
 
     function bindAddButtons() {
       document.querySelectorAll('.menu-row__add').forEach(btn => {

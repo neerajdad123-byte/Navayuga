@@ -456,8 +456,12 @@ async function syncSpecials() {
   const existing = document.getElementById("specialsSection");
   if (existing) existing.remove();
 
-  const active = specials.filter(s => s.active && s.name);
-  if (active.length === 0) return;
+  const active = specials.filter(s => s && s.active && s.name);
+  if (active.length === 0) {
+    const existing = document.getElementById("specialsSection");
+    if (existing) existing.remove();
+    return;
+  }
 
   const section = document.createElement("section");
   section.id = "specialsSection";
@@ -465,11 +469,11 @@ async function syncSpecials() {
 
   const grid = active.map(s => `
     <a href="${s.category ? 'menu.html#' + s.category : 'menu.html'}" class="specials__card">
-      ${s.img ? `<div class="specials__card-img"><img src="${s.img}" alt="${s.name}" /></div>` : ""}
+      ${s.img ? `<div class="specials__card-img"><img src="${s.img}" alt="${s.name}" onerror="this.style.display='none'" /></div>` : ""}
       <div class="specials__card-body">
         <h3 class="specials__card-name">${s.name}</h3>
-        <p class="specials__card-desc">${s.desc}</p>
-        <span class="specials__card-price">₹ ${s.price} <span class="specials__card-arrow">→</span></span>
+        <p class="specials__card-desc">${s.desc || ""}</p>
+        <span class="specials__card-price">₹ ${s.price || 0} <span class="specials__card-arrow">→</span></span>
       </div>
     </a>
   `).join("");
