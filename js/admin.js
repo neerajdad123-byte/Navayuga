@@ -5,16 +5,34 @@
 
 // DEFAULT_MENU comes from menu-data.js (loaded before this script)
 // data helpers use db.js
-async function getMenu()     { const m = await db.getMenu();     return m.length ? m : structuredClone(window.MENU_DATA || []); }
+async function getMenu() {
+  const m = await db.getMenu();
+  if (m.length) return m;
+  // Nothing in the backend yet → use the shared default list (with categories).
+  return (window.MENU_DATA || []).map(d => ({ ...d }));
+}
 async function saveMenu(m)   { await db.saveMenu(m); }
 async function getSpecials() { return await db.getSpecials(); }
 async function saveSpecials(l) { await db.saveSpecials(l); }
 async function getFestival() { return await db.getFestival(); }
-async function saveFestival(f) { await db.saveFestival(f); }
+async function saveFestival(f) { return await db.saveFestival(f); }
 async function getUsers()    { return await db.getCustomers(); }
 async function verifyPassword(pw) { return await db.verifyPassword(pw); }
 async function setPassword(pw)    { return await db.setPassword(pw); }
 async function getOrders()   { return await db.getOrders(); }
+
+/* One-time seed: if the backend menu collection is empty AND we haven't
+   seeded this browser yet, push the full default menu (with categories) so
+   the admin list matches what customers see on menu.html. Safe to re-run —
+   guarded by a settings flag so it never overwrites later edits. */
+async function ensureMenuSeeded() {
+  if (!window.db) return; // localStorage backend: getMenu already returns defaults
+  const existing = await db.getMenu();
+  if (existing && existing.length) return; // already populated — don't touch
+  const defaults = (window.MENU_DATA || []).map(d => ({ ...d }));
+  if (!defaults.length) return;
+  try { await db.saveMenu(defaults); } catch (e) { console.warn("Menu seed failed", e); }
+}
 
 /* ═══ DOM ═══ */
 const loginScreen       = document.getElementById("adminLogin");
@@ -99,15 +117,16 @@ async function initLogin() {
 
 btnLogout.addEventListener("click", () => {
   sessionStorage.removeItem("luckys_admin");
-  dashScreen.style.display = "none";
-  loginScreen.style.display = "flex";
-  loginPassword.value = "";
+  // Send the user back to the main page (as requested)
+  window.location.href = "index.html";
 });
 
 async function showDash() {
   loginScreen.style.display = "none";
   dashScreen.style.display = "block";
   adminStatus.textContent = "🔗 Backend: " + db.getBackendLabel();
+  // Seed the menu on first use so the admin list matches menu.html.
+  try { await ensureMenuSeeded(); } catch (e) { console.warn("seed skipped", e); }
   renderAll();
 }
 
@@ -190,29 +209,74 @@ async function openEdit(index) {
     editDesc.value = menu[index].desc;
     editPrice.value = menu[index].price;
     editImg.value = menu[index].img;
+    if (editCategory) editCategory.value = menu[index].cat || "";
   } else {
     document.getElementById("editTitle").textContent = "Add Item";
     editIndex.value = -1;
     editName.value = "";
     editDesc.value = "";
     editPrice.value = "";
-    editImg.value = "images/placeholder.jpg";
+    editImg.value = "images/placeholder.svg";
+    if (editCategory) editCategory.value = "";
   }
-  if (specialCategoryRow) specialCategoryRow.style.display = "none";
+  // Show the category selector for regular menu items too, so new dishes
+  // land in the right section on menu.html.
+  if (specialCategoryRow) {
+    specialCategoryRow.style.display = "flex";
+    const lbl = specialCategoryRow.querySelector("label");
+    if (lbl) lbl.textContent = "Menu Category";
+  }
   editModal.classList.add("is-open");
 }
 
+/* ═══ EDIT FORM (single handler — handles both menu items & specials) ═══
+   The hidden editIndex tells us which mode we're in:
+     "" or a non-negative integer → menu item (index in the menu list)
+     "special_new"               → adding a special
+     "special_<n>"               → editing special at index n
+   One handler avoids the fragile capture+stopImmediatePropagation trick. */
 editForm.addEventListener("submit", async (e) => {
-  // skip special submissions (handled separately)
-  if (typeof editIndex.value === "string" && editIndex.value.startsWith("special_")) return;
-
   e.preventDefault();
+  const idxVal = editIndex.value;
+
+  // ── Special item? ──
+  if (typeof idxVal === "string" && idxVal.startsWith("special_")) {
+    const specials = await getSpecials();
+    const imgUrl = pendingSpecialFileDataUrl || editImg.value.trim() || "images/placeholder.svg";
+    const category = editCategory ? editCategory.value.trim() : "";
+    const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, active: true, category };
+    if (!item.name || !item.price) return;
+    if (idxVal === "special_new") {
+      specials.push(item);
+    } else {
+      const i = parseInt(idxVal.replace("special_", ""));
+      if (Number.isNaN(i) || !specials[i]) return;
+      item.active = specials[i].active; // preserve existing active flag
+      specials[i] = item;
+    }
+    await saveSpecials(specials);
+    editModal.classList.remove("is-open");
+    editForm.reset();
+    editIndex.value = "";
+    renderSpecial();
+    return;
+  }
+
+  // ── Menu item ──
   const menu = await getMenu();
-  const idx = parseInt(editIndex.value);
-  const imgUrl = pendingEditFileDataUrl || editImg.value.trim() || "images/placeholder.jpg";
-  const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl };
+  const idx = parseInt(idxVal);
+  const imgUrl = pendingEditFileDataUrl || editImg.value.trim() || "images/placeholder.svg";
+  const cat = editCategory ? editCategory.value.trim() : "";
+  const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, cat };
   if (!item.name || !item.price) return;
-  if (idx >= 0) menu[idx] = item; else menu.push(item);
+  if (!Number.isNaN(idx) && idx >= 0 && menu[idx]) {
+    // preserve any extra fields the base item had (e.g. priceHalf/priceFull)
+    item.cat = cat || menu[idx].cat || "other";
+    menu[idx] = { ...menu[idx], ...item };
+  } else {
+    item.cat = cat || "other";
+    menu.push(item);
+  }
   await saveMenu(menu);
   editModal.classList.remove("is-open");
   renderMenu();
@@ -297,7 +361,7 @@ async function openSpecialEdit(index) {
     editName.value = "";
     editDesc.value = "";
     editPrice.value = "";
-    editImg.value = "images/placeholder.jpg";
+    editImg.value = "images/placeholder.svg";
     if (editCategory) editCategory.value = "";
   }
   if (specialCategoryRow) specialCategoryRow.style.display = "flex";
@@ -314,29 +378,8 @@ async function openSpecialEdit(index) {
   }
 }
 
-editForm.addEventListener("submit", async (e) => {
-  const idxVal = editIndex.value;
-  if (typeof idxVal !== "string" || !idxVal.startsWith("special_")) return;
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  const specials = await getSpecials();
-  const imgUrl = pendingSpecialFileDataUrl || editImg.value.trim() || "images/placeholder.jpg";
-  const category = editCategory ? editCategory.value.trim() : "";
-  const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, active: true, category };
-  if (!item.name || !item.price) return;
-  if (idxVal === "special_new") {
-    specials.push(item);
-  } else {
-    const i = parseInt(idxVal.replace("special_", ""));
-    item.active = specials[i].active;
-    specials[i] = item;
-  }
-  await saveSpecials(specials);
-  editModal.classList.remove("is-open");
-  editForm.reset();
-  editIndex.value = "";
-  renderSpecial();
-}, true);
+/* (editForm submit is handled by the single consolidated handler above,
+     which dispatches between menu items and specials based on editIndex.) */
 
 /* ═══ FESTIVAL OFFERS ═══ */
 async function renderFestival() {

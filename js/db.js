@@ -43,6 +43,12 @@ function _lsGet(key, fallback) {
 }
 function _lsSet(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
+/* ── In-tab menu change listeners (used by onMenuChange on localStorage) ── */
+const _menuListeners = new Set();
+function _notifyMenuListeners() {
+  _menuListeners.forEach(fn => { try { fn(null); } catch (e) { console.warn(e); } });
+}
+
 /* ── Firebase init ── */
 let _db = null;  // Firestore instance (lazy)
 function _firestore() {
@@ -144,13 +150,24 @@ const db = {
     _lsSet(STORAGE_KEYS.specials, list);
   },
 
-  /* ─── MENU ─── */
+  /* ─── MENU ───
+     On first visit to a freshly-deployed site (empty Firestore), this
+     auto-seeds the menu from MENU_DATA so customers see every dish
+     immediately — no admin login required. Once seeded it's authoritative,
+     so later admin add/edit/delete all persist and flow back to the site. */
   async getMenu() {
     const fs = _firestore();
     if (fs) {
       const snap = await fs.collection("menu").get();
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       if (data.length > 0) return data;
+      // Firestore empty → seed once from the shared default menu.
+      const defaults = (window.MENU_DATA || []);
+      if (defaults.length) {
+        try { await db.saveMenu(defaults.map(d => ({ ...d }))); }
+        catch (e) { console.warn("Menu auto-seed failed", e); }
+      }
+      return defaults.map(d => ({ ...d }));
     }
     return _lsGet(STORAGE_KEYS.menu, []);
   },
@@ -166,6 +183,26 @@ const db = {
       return;
     }
     _lsSet(STORAGE_KEYS.menu, list);
+    // localStorage has no real-time listeners, so notify any in-tab subscribers
+    // (e.g. an open menu.html tab) so a single-device admin edit still refreshes.
+    _notifyMenuListeners();
+  },
+
+  /* ─── LIVE MENU UPDATES ───
+     Subscribe to menu changes so menu.html refreshes the moment an admin
+     adds/edits/deletes a dish — no reload needed. On Firestore this uses
+     onSnapshot (true real-time, cross-device). On localStorage it's an
+     in-tab callback fired by saveMenu(). Returns an unsubscribe function. */
+  onMenuChange(callback) {
+    const fs = _firestore();
+    if (fs) {
+      return fs.collection("menu").onSnapshot(
+        () => { db.getMenu().then(callback).catch(() => {}); },
+        (err) => { console.warn("menu onSnapshot failed", err); }
+      );
+    }
+    _menuListeners.add(callback);
+    return () => _menuListeners.delete(callback);
   },
 
   /* ─── SETTINGS ─── */

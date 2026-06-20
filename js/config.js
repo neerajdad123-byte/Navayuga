@@ -28,3 +28,35 @@ const FIREBASE_CONFIG = {
   appId: "1:876383464430:web:0dc3110c5291454140fcff",
   measurementId: "G-SSZ0Q1MRN8"
 };
+
+/* ════════════════════ SITE_CONFIG ════════════════════
+   One place for the business details shown across the site
+   (cart checkout → WhatsApp, footer links, reserve section).
+   Update the values here and they reflect everywhere.
+   NOTE: the map embed/links in index.html are left as-is. */
+const SITE_CONFIG = {
+  name: "Lucky's Biriyanihouse",
+  // WhatsApp order number — digits only, with country code (no +).
+  whatsapp: "914000000000",
+  // Phone shown in the Reserve section + tel: link.
+  phoneDisplay: "+91 40 0000 0000",
+  phoneDial: "+914000000000",
+  email: "hello@luckysbiriyanihouse.in",
+  hours: { open: "9:00 AM", close: "10:00 PM", closedDays: [] },
+  address: "Main Road, Eluru, West Godavari, Andhra Pradesh 534001",
+  // Social/order links — empty strings render no link.
+  social: {
+    instagram: "",
+    zomato: "",
+    swiggy: "",
+    facebook: "",
+  },
+  // Left undefined on purpose so index.html's own map links/iframe stay intact.
+  mapLink: undefined,
+  mapEmbed: undefined,
+};
+
+/* Make available to every page (const doesn't attach to window on its own). */
+window.FIREBASE_CONFIG = FIREBASE_CONFIG;
+window.SITE_CONFIG = SITE_CONFIG;
+

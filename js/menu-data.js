@@ -160,3 +160,53 @@ const MENU_DATA = [
   { name:"Fish Malai Tikka", desc:"Creamy malai fish tikka", price:340, img:"images/placeholder.svg", cat:"tandoori" },
   { name:"Tandoori Prawns", desc:"Tandoori-spiced prawns", price:350, img:"images/placeholder.svg", cat:"tandoori" },
 ];
+
+/* ═══════════════ CATEGORY METADATA ═══════════════
+   Shared by menu.html (section headers + sticky nav)
+   and admin.js (category dropdown). Keep `id` values in
+   sync with the `cat` field on every MENU_DATA item. */
+const MENU_CATEGORIES = [
+  { id:"mutton-biryani",   icon:"🐑", title:"Mutton Biryani" },
+  { id:"special-mutton",   icon:"🌟", title:"Special Mutton" },
+  { id:"chicken-biryani",  icon:"🍗", title:"Chicken Biryani" },
+  { id:"special-chicken",  icon:"🔥", title:"Special Chicken Biryani" },
+  { id:"seafood-biryani",  icon:"🦐", title:"Sea Food Biryani" },
+  { id:"veg-biryani",      icon:"🥬", title:"Veg Biryani" },
+  { id:"nonveg-starters",  icon:"🍖", title:"Non Veg Starters" },
+  { id:"veg-starters",     icon:"🥦", title:"Veg Starters" },
+  { id:"veg-curries",      icon:"🍛", title:"Veg Curries" },
+  { id:"nonveg-curries",   icon:"🥘", title:"Non Veg Curries" },
+  { id:"rotis",            icon:"🫓", title:"Rotis" },
+  { id:"rice",             icon:"🍚", title:"Rice" },
+  { id:"rice-noodles",     icon:"🍜", title:"Rice / Noodles" },
+  { id:"tandoori",         icon:"🔥", title:"Tandoori" },
+];
+
+/* Optional sub-divider titles shown inside a category (e.g. the
+   "Fried Rice" / "Noodles" headers in rice-noodles). Keyed by cat id.
+   Each entry is a list of { name, before } where `before` is the item
+   name the divider should appear directly above. */
+const MENU_SUBHEADERS = {
+  "rice-noodles": [
+    { text:"Fried Rice", before:"Veg Fried Rice" },
+    { text:"Noodles",    before:"Veg Soft Noodles" },
+  ],
+};
+
+/* Friendly title for a category id (falls back to the id). */
+function categoryTitle(catId) {
+  const c = MENU_CATEGORIES.find(c => c.id === catId);
+  return c ? c.title : (catId || "Other");
+}
+
+/* ═══════════════ EXPOSE TO window ═══════════════
+   Classic <script> files share data via global scope. A top-level
+   `const`/`function` does NOT create a property on `window`, but
+   menu.html and admin.js read these as `window.MENU_DATA` etc.
+   Without these assignments those references are `undefined`, which
+   is why the menu page renders nothing and the admin list is empty.
+   Assigning explicitly makes them available to every consumer. */
+window.MENU_DATA       = MENU_DATA;
+window.MENU_CATEGORIES = MENU_CATEGORIES;
+window.MENU_SUBHEADERS = MENU_SUBHEADERS;
+window.categoryTitle   = categoryTitle;

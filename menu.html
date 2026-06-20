@@ -503,433 +503,10 @@
   <!-- MENU CONTENT -->
   <main class="menu-page">
 
-    <!-- MUTTON BIRYANI -->
-    <section class="menu-section" id="mutton-biryani">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🐑</div>
-        <h2 class="menu-section__title">Mutton Biryani</h2>
-        <span class="menu-section__count">5 items</span>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Biryani Single</div>
-          <div class="menu-row__desc">A generous single portion of slow-cooked mutton and fragrant basmati</div>
-        </div>
-        <div class="menu-row__price">₹220</div>
-        <button class="menu-row__add" data-name="Mutton Biryani Single" data-price="220">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Biryani Full</div>
-          <div class="menu-row__desc">Full plate — two pieces of tender mutton, sealed with dough and baked</div>
-        </div>
-        <div class="menu-row__price">₹380</div>
-        <button class="menu-row__add" data-name="Mutton Biryani Full" data-price="380">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Biryani Double Ghosh</div>
-          <div class="menu-row__desc">Double the meat, double the joy — four pieces of premium mutton</div>
-        </div>
-        <div class="menu-row__price">₹520</div>
-        <button class="menu-row__add" data-name="Mutton Biryani Double Ghosh" data-price="520">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Biryani Family Pack (4)</div>
-          <div class="menu-row__desc">Serves four — the perfect gathering of family around the biryani pot</div>
-        </div>
-        <div class="menu-row__price">₹800</div>
-        <button class="menu-row__add" data-name="Mutton Biryani Family Pack (4)" data-price="800">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Biryani Jumbo Pack (5)</div>
-          <div class="menu-row__desc">The feast size — five generous portions for the true biryani lover</div>
-        </div>
-        <div class="menu-row__price">₹1100</div>
-        <button class="menu-row__add" data-name="Mutton Biryani Jumbo Pack (5)" data-price="1100">Add</button>
-      </div>
-    </section>
+    <!-- Menu sections are injected here by renderMenu() in the script below,
+         so admin edits (Firestore) reflect live on this page. -->
+    <div id="menuRoot"></div>
 
-    <!-- SPECIAL MUTTON -->
-    <section class="menu-section" id="special-mutton">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🌟</div>
-        <h2 class="menu-section__title">Special Mutton</h2>
-        <span class="menu-section__count">4 items</span>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Fry Piece Biryani</div>
-          <div class="menu-row__desc">Crispy fried mutton pieces layered with aromatic rice and caramelised onions</div>
-        </div>
-        <div class="menu-row__price">₹450</div>
-        <button class="menu-row__add" data-name="Mutton Fry Piece Biryani" data-price="450">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Moghlai Biryani</div>
-          <div class="menu-row__desc">Royal Mughal recipe — saffron, dry fruits, and slow-braised mutton</div>
-        </div>
-        <div class="menu-row__price">₹480</div>
-        <button class="menu-row__add" data-name="Mutton Moghlai Biryani" data-price="480">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Kheema Biryani</div>
-          <div class="menu-row__desc">Minced mutton cooked with whole spices, layered with long-grain basmati</div>
-        </div>
-        <div class="menu-row__price">₹550</div>
-        <button class="menu-row__add" data-name="Mutton Kheema Biryani" data-price="550">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Mutton Nallighosh Biryani</div>
-          <div class="menu-row__desc">Hyderabadi specialty — tender lamb shanks falling off the bone</div>
-        </div>
-        <div class="menu-row__price">₹600</div>
-        <button class="menu-row__add" data-name="Mutton Nallighosh Biryani" data-price="600">Add</button>
-      </div>
-    </section>
-
-    <!-- CHICKEN BIRYANI -->
-    <section class="menu-section" id="chicken-biryani">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🍗</div>
-        <h2 class="menu-section__title">Chicken Biryani</h2>
-        <span class="menu-section__count">6 items</span>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Biryani Single</div>
-          <div class="menu-row__desc">One piece of juicy chicken, perfectly spiced for a solo indulgence</div>
-        </div>
-        <div class="menu-row__price">₹160</div>
-        <button class="menu-row__add" data-name="Chicken Biryani Single" data-price="160">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Biryani Full</div>
-          <div class="menu-row__desc">Two pieces of chicken, sealed and slow-cooked in the traditional dum style</div>
-        </div>
-        <div class="menu-row__price">₹280</div>
-        <button class="menu-row__add" data-name="Chicken Biryani Full" data-price="280">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Extra Piece</div>
-          <div class="menu-row__desc">Add an extra piece of our signature chicken to any biryani</div>
-        </div>
-        <div class="menu-row__price">₹60</div>
-        <button class="menu-row__add" data-name="Chicken Extra Piece" data-price="60">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Biryani Family Pack</div>
-          <div class="menu-row__desc">Serves four — share the love, share the biryani</div>
-        </div>
-        <div class="menu-row__price">₹600</div>
-        <button class="menu-row__add" data-name="Chicken Biryani Family Pack" data-price="600">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Biryani Jumbo Pack (5)</div>
-          <div class="menu-row__desc">Five full portions — for when the whole gang is hungry</div>
-        </div>
-        <div class="menu-row__price">₹750</div>
-        <button class="menu-row__add" data-name="Chicken Biryani Jumbo Pack (5)" data-price="750">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Egg Biryani</div>
-          <div class="menu-row__desc">Boiled eggs nestled in spiced rice — simple, satisfying, sublime</div>
-        </div>
-        <div class="menu-row__price">₹200</div>
-        <button class="menu-row__add" data-name="Egg Biryani" data-price="200">Add</button>
-      </div>
-    </section>
-
-    <!-- SPECIAL CHICKEN BIRYANI -->
-    <section class="menu-section" id="special-chicken">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🔥</div>
-        <h2 class="menu-section__title">Special Chicken Biryani</h2>
-        <span class="menu-section__count">5 items</span>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken 65 Biryani</div>
-          <div class="menu-row__desc">Spicy Chicken 65 pieces tossed with biryani rice — half or full</div>
-        </div>
-        <div class="menu-row__price">₹180 / ₹300</div>
-        <button class="menu-row__add" data-name="Chicken 65 Biryani" data-price="180">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Boneless Biryani</div>
-          <div class="menu-row__desc">Tender boneless chicken chunks, marinated and layered with saffron rice</div>
-        </div>
-        <div class="menu-row__price">₹220 / ₹350</div>
-        <button class="menu-row__add" data-name="Chicken Boneless Biryani" data-price="220">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Fry Piece Biryani</div>
-          <div class="menu-row__desc">Crispy fried chicken pieces with aromatic rice and raita — half or full</div>
-        </div>
-        <div class="menu-row__price">₹200 / ₹320</div>
-        <button class="menu-row__add" data-name="Chicken Fry Piece Biryani" data-price="200">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Lollipop Biryani</div>
-          <div class="menu-row__desc">Chicken lollipops perched on a bed of spiced biryani rice</div>
-        </div>
-        <div class="menu-row__price">₹320</div>
-        <button class="menu-row__add" data-name="Chicken Lollipop Biryani" data-price="320">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Chicken Moghlai Biryani</div>
-          <div class="menu-row__desc">Mughal-inspired — dry fruits, cream, and saffron with tender chicken</div>
-        </div>
-        <div class="menu-row__price">₹350</div>
-        <button class="menu-row__add" data-name="Chicken Moghlai Biryani" data-price="350">Add</button>
-      </div>
-    </section>
-
-    <!-- SEA FOOD BIRYANI -->
-    <section class="menu-section" id="seafood-biryani">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🦐</div>
-        <h2 class="menu-section__title">Sea Food Biryani</h2>
-        <span class="menu-section__count">3 items</span>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Fish Biryani</div>
-          <div class="menu-row__desc">Fresh catch of the day, marinated in coastal spices and layered with rice</div>
-        </div>
-        <div class="menu-row__price">₹320</div>
-        <button class="menu-row__add" data-name="Fish Biryani" data-price="320">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">Prawns Biryani</div>
-          <div class="menu-row__desc">Juicy prawns in a fragrant masala, slow-cooked with basmati</div>
-        </div>
-        <div class="menu-row__price">₹350</div>
-        <button class="menu-row__add" data-name="Prawns Biryani" data-price="350">Add</button>
-      </div>
-      <div class="menu-row">
-        <div class="menu-row__info">
-          <div class="menu-row__name">MLA Potlam Biryani</div>
-          <div class="menu-row__desc">The politician's favourite — mutton, chicken, and prawns in one grand potlam</div>
-        </div>
-        <div class="menu-row__price">₹480</div>
-        <button class="menu-row__add" data-name="MLA Potlam Biryani" data-price="480">Add</button>
-      </div>
-    </section>
-
-    <!-- VEG BIRYANI -->
-    <section class="menu-section" id="veg-biryani">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🥬</div>
-        <h2 class="menu-section__title">Veg Biryani</h2>
-        <span class="menu-section__count">6 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Biryani</div><div class="menu-row__desc">Garden-fresh vegetables, slow-cooked with whole spices and basmati</div></div><div class="menu-row__price">₹200</div><button class="menu-row__add" data-name="Veg Biryani" data-price="200">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Manchurian Biryani</div><div class="menu-row__desc">Indo-Chinese fusion — crispy Manchurian balls meet biryani rice</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Veg Manchurian Biryani" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Paneer Biryani</div><div class="menu-row__desc">Soft paneer cubes in spiced rice — a vegetarian's delight</div></div><div class="menu-row__price">₹260</div><button class="menu-row__add" data-name="Veg Paneer Biryani" data-price="260">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Mushroom Biryani</div><div class="menu-row__desc">Earthy mushrooms and aromatic rice, a match made in heaven</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Veg Mushroom Biryani" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Kaju Biryani</div><div class="menu-row__desc">Rich cashew nuts and vegetables in a creamy, spiced rice preparation</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Kaju Biryani" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mixed Veg Biryani</div><div class="menu-row__desc">The best of the garden — mixed vegetables in a festive biryani</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Mixed Veg Biryani" data-price="300">Add</button></div>
-    </section>
-
-    <!-- NON VEG STARTERS -->
-    <section class="menu-section" id="nonveg-starters">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🍖</div>
-        <h2 class="menu-section__title">Non Veg Starters</h2>
-        <span class="menu-section__count">19 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken 65</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Chicken 65" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Manchuria</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Chicken Manchuria" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chilli Chicken</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Chilli Chicken" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Drumsticks</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Chicken Drumsticks" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Drums of Heaven</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Chicken Drums of Heaven" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Lollipop</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Chicken Lollipop" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Pepper Chicken</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Pepper Chicken" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Majestic</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Chicken Majestic" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken 555</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Chicken 555" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Lemon Chicken</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Lemon Chicken" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Cashew Chicken</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Cashew Chicken" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Schezwan Chicken</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Schezwan Chicken" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Ginger Chicken</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Ginger Chicken" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Garlic Chicken</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Garlic Chicken" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Hongkong</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Chicken Hongkong" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Hunan Chicken</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Hunan Chicken" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken 8 To 8</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Chicken 8 To 8" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Honey Chilli Chicken</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Honey Chilli Chicken" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Dragon Chicken</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Dragon Chicken" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Rampuri</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Chicken Rampuri" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Apollo Chicken</div></div><div class="menu-row__price">₹340</div><button class="menu-row__add" data-name="Apollo Chicken" data-price="340">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Sholay Chicken</div></div><div class="menu-row__price">₹350</div><button class="menu-row__add" data-name="Sholay Chicken" data-price="350">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Bangla Kodi Chips</div></div><div class="menu-row__price">₹350</div><button class="menu-row__add" data-name="Bangla Kodi Chips" data-price="350">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Lucky's Special Chicken</div></div><div class="menu-row__price">₹380</div><button class="menu-row__add" data-name="Lucky's Special Chicken" data-price="380">Add</button></div>
-
-      <div class="menu-sub" style="margin-top:2.5rem"><span class="menu-sub__line"></span><span class="menu-sub__text">Additional Non Veg Starters</span><span class="menu-sub__line"></span></div>
-
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mutton 65</div></div><div class="menu-row__price">₹350</div><button class="menu-row__add" data-name="Mutton 65" data-price="350">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mutton Chilli</div></div><div class="menu-row__price">₹350</div><button class="menu-row__add" data-name="Mutton Chilli" data-price="350">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Pepper Mutton</div></div><div class="menu-row__price">₹380</div><button class="menu-row__add" data-name="Pepper Mutton" data-price="380">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mutton Kheema Balls</div></div><div class="menu-row__price">₹430</div><button class="menu-row__add" data-name="Mutton Kheema Balls" data-price="430">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chilli Fish</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Chilli Fish" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Apollo Fish</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Apollo Fish" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Pepper Fish</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Pepper Fish" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Fish Fingers</div></div><div class="menu-row__price">₹340</div><button class="menu-row__add" data-name="Fish Fingers" data-price="340">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Fish 65</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Fish 65" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chilli Prawns</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Chilli Prawns" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Loose Prawns</div></div><div class="menu-row__price">₹350</div><button class="menu-row__add" data-name="Loose Prawns" data-price="350">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Egg Chilli</div></div><div class="menu-row__price">₹160</div><button class="menu-row__add" data-name="Egg Chilli" data-price="160">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Egg 65</div></div><div class="menu-row__price">₹160</div><button class="menu-row__add" data-name="Egg 65" data-price="160">Add</button></div>
-    </section>
-
-    <!-- VEG STARTERS -->
-    <section class="menu-section" id="veg-starters">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🥦</div>
-        <h2 class="menu-section__title">Veg Starters</h2>
-        <span class="menu-section__count">10 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Manchuria</div></div><div class="menu-row__price">₹200</div><button class="menu-row__add" data-name="Veg Manchuria" data-price="200">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chilli Mushroom</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Chilli Mushroom" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mushroom 65</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Mushroom 65" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Pepper Mushroom</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Pepper Mushroom" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chilli Babycorn</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Chilli Babycorn" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Pepper Babycorn</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Pepper Babycorn" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Gobi Manchuria</div></div><div class="menu-row__price">₹180</div><button class="menu-row__add" data-name="Gobi Manchuria" data-price="180">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Paneer 65</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Paneer 65" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Dragon Paneer</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Dragon Paneer" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Paneer Majestic</div></div><div class="menu-row__price">₹260</div><button class="menu-row__add" data-name="Paneer Majestic" data-price="260">Add</button></div>
-    </section>
-
-    <!-- VEG CURRIES -->
-    <section class="menu-section" id="veg-curries">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🍛</div>
-        <h2 class="menu-section__title">Veg Curries</h2>
-        <span class="menu-section__count">8 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Paneer Butter Masala</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Paneer Butter Masala" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Kadai Paneer</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Kadai Paneer" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Shahi Paneer</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Shahi Paneer" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Paneer Tikka Masala</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Paneer Tikka Masala" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Palak Paneer</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Palak Paneer" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Paneer Chatpat</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Paneer Chatpat" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Kaju Paneer</div></div><div class="menu-row__price">₹350</div><button class="menu-row__add" data-name="Kaju Paneer" data-price="350">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mushroom Masala</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Mushroom Masala" data-price="240">Add</button></div>
-    </section>
-
-    <!-- NON VEG CURRIES -->
-    <section class="menu-section" id="nonveg-curries">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🥘</div>
-        <h2 class="menu-section__title">Non Veg Curries</h2>
-        <span class="menu-section__count">14 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Egg Masala</div></div><div class="menu-row__price">₹150</div><button class="menu-row__add" data-name="Egg Masala" data-price="150">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Butter Chicken</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Butter Chicken" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Kadai Chicken</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Kadai Chicken" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Methi Chicken</div></div><div class="menu-row__price">₹240</div><button class="menu-row__add" data-name="Methi Chicken" data-price="240">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Kolhapuri</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Chicken Kolhapuri" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Tikka Masala</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Chicken Tikka Masala" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Punjabi Chicken</div></div><div class="menu-row__price">₹260</div><button class="menu-row__add" data-name="Punjabi Chicken" data-price="260">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Telangana Chicken</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Telangana Chicken" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Andhra Chicken</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Andhra Chicken" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Rara</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Chicken Rara" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Dum Ka Chicken</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Dum Ka Chicken" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Afghani Chicken</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Afghani Chicken" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mutton Kheema</div></div><div class="menu-row__price">₹380</div><button class="menu-row__add" data-name="Mutton Kheema" data-price="380">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mutton Rogan Ghosh</div></div><div class="menu-row__price">₹380</div><button class="menu-row__add" data-name="Mutton Rogan Ghosh" data-price="380">Add</button></div>
-    </section>
-
-    <!-- ROTIS -->
-    <section class="menu-section" id="rotis">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🫓</div>
-        <h2 class="menu-section__title">Rotis</h2>
-        <span class="menu-section__count">5 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Rumali Roti</div></div><div class="menu-row__price">₹15</div><button class="menu-row__add" data-name="Rumali Roti" data-price="15">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Tandoori Roti</div></div><div class="menu-row__price">₹20</div><button class="menu-row__add" data-name="Tandoori Roti" data-price="20">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Plain Naan</div></div><div class="menu-row__price">₹30</div><button class="menu-row__add" data-name="Plain Naan" data-price="30">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Butter Naan</div></div><div class="menu-row__price">₹40</div><button class="menu-row__add" data-name="Butter Naan" data-price="40">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Garlic Naan</div></div><div class="menu-row__price">₹50</div><button class="menu-row__add" data-name="Garlic Naan" data-price="50">Add</button></div>
-    </section>
-
-    <!-- RICE -->
-    <section class="menu-section" id="rice">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🍚</div>
-        <h2 class="menu-section__title">Rice</h2>
-        <span class="menu-section__count">3 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Jeera Rice</div></div><div class="menu-row__price">₹140</div><button class="menu-row__add" data-name="Jeera Rice" data-price="140">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Ghee Rice</div></div><div class="menu-row__price">₹160</div><button class="menu-row__add" data-name="Ghee Rice" data-price="160">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Curd Rice</div></div><div class="menu-row__price">₹120</div><button class="menu-row__add" data-name="Curd Rice" data-price="120">Add</button></div>
-    </section>
-
-    <!-- RICE / NOODLES -->
-    <section class="menu-section" id="rice-noodles">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🍜</div>
-        <h2 class="menu-section__title">Rice / Noodles</h2>
-        <span class="menu-section__count">16 items</span>
-      </div>
-      <div class="menu-sub"><span class="menu-sub__line"></span><span class="menu-sub__text">Fried Rice</span><span class="menu-sub__line"></span></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Fried Rice</div></div><div class="menu-row__price">₹140</div><button class="menu-row__add" data-name="Veg Fried Rice" data-price="140">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mushroom Fried Rice</div></div><div class="menu-row__price">₹160</div><button class="menu-row__add" data-name="Mushroom Fried Rice" data-price="160">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Paneer Fried Rice</div></div><div class="menu-row__price">₹170</div><button class="menu-row__add" data-name="Paneer Fried Rice" data-price="170">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Egg Fried Rice</div></div><div class="menu-row__price">₹140</div><button class="menu-row__add" data-name="Egg Fried Rice" data-price="140">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Fried Rice</div></div><div class="menu-row__price">₹200</div><button class="menu-row__add" data-name="Chicken Fried Rice" data-price="200">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Schezwan Fried Rice</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Chicken Schezwan Fried Rice" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Prawn Fried Rice</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Prawn Fried Rice" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mixed Non Veg Fried Rice</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Mixed Non Veg Fried Rice" data-price="280">Add</button></div>
-      <div class="menu-sub"><span class="menu-sub__line"></span><span class="menu-sub__text">Noodles</span><span class="menu-sub__line"></span></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Soft Noodles</div></div><div class="menu-row__price">₹140</div><button class="menu-row__add" data-name="Veg Soft Noodles" data-price="140">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Schezwan Noodles</div></div><div class="menu-row__price">₹150</div><button class="menu-row__add" data-name="Veg Schezwan Noodles" data-price="150">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Veg Chilli Garlic Noodles</div></div><div class="menu-row__price">₹180</div><button class="menu-row__add" data-name="Veg Chilli Garlic Noodles" data-price="180">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Egg Noodles</div></div><div class="menu-row__price">₹140</div><button class="menu-row__add" data-name="Egg Noodles" data-price="140">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Soft Noodles</div></div><div class="menu-row__price">₹200</div><button class="menu-row__add" data-name="Chicken Soft Noodles" data-price="200">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Schezwan Noodles</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Chicken Schezwan Noodles" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Chilli Garlic Noodles</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Chicken Chilli Garlic Noodles" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mixed Non Veg Noodles</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Mixed Non Veg Noodles" data-price="280">Add</button></div>
-    </section>
-
-    <!-- TANDOORI -->
-    <section class="menu-section" id="tandoori">
-      <div class="menu-section__header">
-        <div class="menu-section__icon">🔥</div>
-        <h2 class="menu-section__title">Tandoori</h2>
-        <span class="menu-section__count">14 items</span>
-      </div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Hara Bara Kebab</div></div><div class="menu-row__price">₹220</div><button class="menu-row__add" data-name="Hara Bara Kebab" data-price="220">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Paneer Tikka</div></div><div class="menu-row__price">₹250</div><button class="menu-row__add" data-name="Paneer Tikka" data-price="250">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Malai Broccoli Tikka</div></div><div class="menu-row__price">₹300</div><button class="menu-row__add" data-name="Malai Broccoli Tikka" data-price="300">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Tandoori Chicken</div></div><div class="menu-row__price">₹200 / ₹380</div><button class="menu-row__add" data-name="Tandoori Chicken" data-price="200">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Tangdi Kebab</div></div><div class="menu-row__price">₹200 / ₹380</div><button class="menu-row__add" data-name="Tangdi Kebab" data-price="200">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Chicken Tikka</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Chicken Tikka" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Angara Kebab</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Angara Kebab" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Hariyali Kebab</div></div><div class="menu-row__price">₹280</div><button class="menu-row__add" data-name="Hariyali Kebab" data-price="280">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Murgh Malai Kebab</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Murgh Malai Kebab" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mutton Sheekh Kebab</div></div><div class="menu-row__price">₹440</div><button class="menu-row__add" data-name="Mutton Sheekh Kebab" data-price="440">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Mutton Galouti Kebab</div></div><div class="menu-row__price">₹450</div><button class="menu-row__add" data-name="Mutton Galouti Kebab" data-price="450">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Fish Tikka</div></div><div class="menu-row__price">₹320</div><button class="menu-row__add" data-name="Fish Tikka" data-price="320">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Fish Malai Tikka</div></div><div class="menu-row__price">₹340</div><button class="menu-row__add" data-name="Fish Malai Tikka" data-price="340">Add</button></div>
-      <div class="menu-row"><div class="menu-row__info"><div class="menu-row__name">Tandoori Prawns</div></div><div class="menu-row__price">₹350</div><button class="menu-row__add" data-name="Tandoori Prawns" data-price="350">Add</button></div>
-    </section>
 
   </main>
 
@@ -979,6 +556,134 @@
   <script src="js/cart.js"></script>
 
   <script>
+    // ════════ DYNAMIC MENU RENDERER ════════
+    // Builds every section + row from MENU_DATA, then overlays any edits
+    // the admin saved to Firestore (matched by dish name). Falls back to
+    // pure MENU_DATA when Firestore is empty or unreachable, so the page
+    // is never blank.
+    function escapeHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    // Display price string. Items named "(Half)/(Full)" show a split price.
+    function priceLabel(item) {
+      const n = (item.name || '').toLowerCase();
+      if (/\(half\)/.test(n) && item.priceHalf && item.priceFull) {
+        return '₹' + item.priceHalf + ' / ₹' + item.priceFull;
+      }
+      return '₹' + item.price;
+    }
+    function addPrice(item) {
+      const n = (item.name || '').toLowerCase();
+      if (/\(half\)/.test(n) && item.priceHalf) return item.priceHalf;
+      return item.price;
+    }
+
+    function buildRowHtml(item) {
+      const name = escapeHtml(item.name);
+      const desc = item.desc ? '<div class="menu-row__desc">' + escapeHtml(item.desc) + '</div>' : '';
+      return '<div class="menu-row">' +
+               '<div class="menu-row__info">' +
+                 '<div class="menu-row__name">' + name + '</div>' +
+                 desc +
+               '</div>' +
+               '<div class="menu-row__price">' + priceLabel(item) + '</div>' +
+               '<button class="menu-row__add" data-name="' + name + '" data-price="' + addPrice(item) + '">Add</button>' +
+             '</div>';
+    }
+
+    async function renderMenu() {
+      const root = document.getElementById('menuRoot');
+      if (!root) return;
+      const cats = window.MENU_CATEGORIES || [];
+      const subs = window.MENU_SUBHEADERS || {};
+
+      // Build the list to display. Firestore is AUTHORITATIVE when it has
+      // data — so admin add/edit/DELETE all flow through. The hardcoded
+      // MENU_DATA is only a seed/fallback (used before any admin edit and
+      // when Firestore is empty/unreachable, so the page is never blank).
+      let merged = (window.MENU_DATA || []).map(d => ({ ...d }));
+      let authoritative = false;
+      try {
+        if (window.db) {
+          const live = await db.getMenu();
+          if (live && live.length) {
+            // Firestore owns the truth: take it as-is, assign a sane cat to orphans.
+            merged = live.map(d => ({ ...d, cat: d.cat || 'other' }));
+            authoritative = true;
+          }
+        }
+      } catch (e) { console.warn('Menu load fell back to defaults', e); }
+
+      const html = cats.map(cat => {
+        const items = merged.filter(m => m.cat === cat.id);
+        if (!items.length) return ''; // hide empty categories
+        const sub = subs[cat.id] || [];
+        let body = '';
+        items.forEach(item => {
+          const divider = sub.find(s => s.before && (item.name||'').toLowerCase() === s.before.toLowerCase());
+          if (divider) {
+            body += '<div class="menu-sub"><span class="menu-sub__line"></span><span class="menu-sub__text">' +
+                    escapeHtml(divider.text) + '</span><span class="menu-sub__line"></span></div>';
+          }
+          body += buildRowHtml(item);
+        });
+        return '<section class="menu-section" id="' + cat.id + '">' +
+                 '<div class="menu-section__header">' +
+                   '<div class="menu-section__icon">' + cat.icon + '</div>' +
+                   '<h2 class="menu-section__title">' + escapeHtml(cat.title) + '</h2>' +
+                   '<span class="menu-section__count">' + items.length + ' items</span>' +
+                 '</div>' + body +
+               '</section>';
+      }).join('');
+
+      // Items that don't belong to any known category (e.g. 'other') go last.
+      const known = new Set(cats.map(c => c.id));
+      const orphans = merged.filter(m => !known.has(m.cat));
+      const orphanHtml = orphans.length
+        ? '<section class="menu-section" id="other">' +
+            '<div class="menu-section__header">' +
+              '<div class="menu-section__icon">🍽️</div>' +
+              '<h2 class="menu-section__title">More</h2>' +
+              '<span class="menu-section__count">' + orphans.length + ' items</span>' +
+            '</div>' + orphans.map(buildRowHtml).join('') +
+          '</section>'
+        : '';
+
+      root.innerHTML = html + orphanHtml;
+
+      // Re-bind "Add to cart" buttons for the freshly injected rows.
+      bindAddButtons();
+      // Re-run the scroll-highlight so it sees the new sections.
+      if (typeof refreshCategoryHighlight === 'function') refreshCategoryHighlight();
+      return authoritative;
+    }
+
+    // Render immediately from MENU_DATA (instant, no blank page), then refresh
+    // once Firestore resolves. After that, subscribe so ANY admin edit
+    // (add/edit/delete) updates the menu live — no reload needed.
+    renderMenu().then(() => {
+      if (window.db && typeof db.onMenuChange === 'function') {
+        db.onMenuChange(() => renderMenu());
+      }
+    });
+
+    function bindAddButtons() {
+      document.querySelectorAll('.menu-row__add').forEach(btn => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = '1';
+        btn.addEventListener('click', () => {
+          CART.add(btn.dataset.name, btn.dataset.price);
+          btn.classList.add('added');
+          const q = CART.get().find(c => c.name === btn.dataset.name)?.qty || 1;
+          btn.textContent = q + 'x';
+          setTimeout(() => { btn.classList.remove('added'); btn.textContent = 'Add'; }, 800);
+        });
+      });
+    }
+
     // THEME SWITCHER
     const themeBtn = document.createElement('button');
     themeBtn.className = 'theme-switch';
@@ -1039,9 +744,11 @@
     });
 
     // HIGHLIGHT ACTIVE CATEGORY ON SCROLL
-    const sections = document.querySelectorAll('.menu-section');
-    const catBtns = document.querySelectorAll('.cat-nav__btn');
+    // (re-queries each scroll because sections are injected dynamically)
+    function refreshCategoryHighlight() { /* placeholder — real version below */ }
     window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.menu-section');
+      const catBtns = document.querySelectorAll('.cat-nav__btn');
       let current = '';
       sections.forEach(sec => {
         const top = sec.getBoundingClientRect().top;
@@ -1111,16 +818,7 @@
 
     cartCheckout.addEventListener('click', () => { if (CART.get().length) CART.checkout(); });
 
-    // ADD TO CART FROM MENU
-    document.querySelectorAll('.menu-row__add').forEach(btn => {
-      btn.addEventListener('click', () => {
-        CART.add(btn.dataset.name, btn.dataset.price);
-        btn.classList.add('added');
-        const q = CART.get().find(c => c.name === btn.dataset.name)?.qty || 1;
-        btn.textContent = q + 'x';
-        setTimeout(() => { btn.classList.remove('added'); btn.textContent = 'Add'; }, 800);
-      });
-    });
+    // (Add-to-cart buttons are bound dynamically by bindAddButtons() in renderMenu().)
 
     // FOOTER LINKS + CONFIG
     function buildFooterLinks() {

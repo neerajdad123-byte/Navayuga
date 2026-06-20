@@ -432,8 +432,8 @@ userPopupForm.addEventListener("submit", async (e) => {
   localStorage.setItem(STORAGE_USER, JSON.stringify(userData));
 
   // save to the real data layer (cloud if configured, else local)
-  if (window.DB) {
-    try { await DB.init(); await DB.addCustomer(userData); } catch (err) {}
+  if (window.db) {
+    try { await db.addCustomer(userData); } catch (err) { console.warn("addCustomer failed", err); }
   }
 
   closePopup();
@@ -446,8 +446,8 @@ popupSkip.addEventListener("click", closePopup);
 ─────────────────────────────── */
 async function syncSpecials() {
   let specials = [];
-  if (window.DB) {
-    try { await DB.init(); specials = await DB.getSpecials(); } catch (e) { specials = []; }
+  if (window.db) {
+    try { specials = await db.getSpecials(); } catch (e) { console.warn("getSpecials failed", e); specials = []; }
   }
   // legacy fallback
   if (!specials.length) {
