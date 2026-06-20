@@ -43,10 +43,14 @@ function _lsGet(key, fallback) {
 }
 function _lsSet(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
-/* ── In-tab menu change listeners (used by onMenuChange on localStorage) ── */
+/* ── In-tab change listeners (used by onMenuChange / onSpecialsChange on localStorage) ── */
 const _menuListeners = new Set();
 function _notifyMenuListeners() {
   _menuListeners.forEach(fn => { try { fn(null); } catch (e) { console.warn(e); } });
+}
+const _specialsListeners = new Set();
+function _notifySpecialsListeners() {
+  _specialsListeners.forEach(fn => { try { fn(null); } catch (e) { console.warn(e); } });
 }
 
 /* ── Firebase init ── */
@@ -148,6 +152,9 @@ const db = {
       return;
     }
     _lsSet(STORAGE_KEYS.specials, list);
+    // localStorage has no real-time listeners, so notify any in-tab
+    // subscribers (e.g. an open index.html tab) so an admin edit still refreshes.
+    _notifySpecialsListeners();
   },
 
   /* ─── MENU ───
@@ -203,6 +210,23 @@ const db = {
     }
     _menuListeners.add(callback);
     return () => _menuListeners.delete(callback);
+  },
+
+  /* ─── LIVE SPECIALS UPDATES ───
+     Mirrors onMenuChange for the specials collection, so a special added /
+     edited / toggled / deleted in the admin panel shows up on the main page
+     (and anywhere else that subscribes) instantly — no reload needed.
+     Firestore = true real-time via onSnapshot; localStorage = in-tab callback. */
+  onSpecialsChange(callback) {
+    const fs = _firestore();
+    if (fs) {
+      return fs.collection("specials").onSnapshot(
+        () => { db.getSpecials().then(callback).catch(() => {}); },
+        (err) => { console.warn("specials onSnapshot failed", err); }
+      );
+    }
+    _specialsListeners.add(callback);
+    return () => _specialsListeners.delete(callback);
   },
 
   /* ─── SETTINGS ─── */

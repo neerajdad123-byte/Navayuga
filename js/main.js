@@ -483,6 +483,12 @@ async function syncSpecials() {
 }
 syncSpecials();
 
+// Subscribe to live specials changes so a special added / edited / toggled /
+// deleted in the admin panel appears on this page instantly — no reload needed.
+if (window.db && typeof db.onSpecialsChange === "function") {
+  db.onSpecialsChange(() => syncSpecials());
+}
+
 /* ───────────────────────────────
    14. POPULATE CONTACT / HOURS / FOOTER FROM config.js
 ─────────────────────────────── */
