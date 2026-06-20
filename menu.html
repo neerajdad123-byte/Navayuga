@@ -707,9 +707,16 @@
     // Render immediately from MENU_DATA (instant, no blank page), then refresh
     // once Firestore resolves. After that, subscribe so ANY admin edit
     // (add/edit/delete) updates the menu live — no reload needed.
+    // IMPORTANT: renderSpecials() is called AFTER renderMenu() completes because
+    // renderMenu() sets root.innerHTML which would overwrite the specials block.
     renderMenu().then(() => {
+      renderSpecials();
+      // When menu changes, re-render specials too (since renderMenu() sets innerHTML)
       if (window.db && typeof db.onMenuChange === 'function') {
-        db.onMenuChange(() => renderMenu());
+        db.onMenuChange(() => { renderMenu(); renderSpecials(); });
+      }
+      if (window.db && typeof db.onSpecialsChange === 'function') {
+        db.onSpecialsChange(() => renderSpecials());
       }
     });
 
@@ -728,6 +735,10 @@
       try {
         if (window.db) specials = await db.getSpecials();
       } catch (e) { console.warn('getSpecials failed', e); specials = []; }
+      // legacy localStorage fallback
+      if (!specials.length) {
+        try { specials = JSON.parse(localStorage.getItem("luckys_special")) || []; } catch (e) { specials = []; }
+      }
       const active = (specials || []).filter(s => s && s.active && s.name);
       if (active.length === 0) return; // nothing to show — hide the block
 
@@ -771,12 +782,6 @@
           setTimeout(() => { btn.classList.remove('added'); btn.textContent = 'Add'; }, 800);
         });
       });
-    }
-
-    // Render now and subscribe to live changes.
-    renderSpecials();
-    if (window.db && typeof db.onSpecialsChange === 'function') {
-      db.onSpecialsChange(() => renderSpecials());
     }
 
     function bindAddButtons() {

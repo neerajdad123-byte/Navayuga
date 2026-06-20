@@ -61,12 +61,13 @@ function _firestore() {
   // firebase SDK must be loaded via CDN in admin.html
   if (typeof firebase === "undefined") return null;
   try {
-    firebase.initializeApp(FIREBASE_CONFIG);
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     _db = firebase.firestore();
     _db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
     return _db;
   } catch (e) {
     console.warn("Firebase init failed — falling back to localStorage", e);
+    _db = null;
     return null;
   }
 }
@@ -78,8 +79,10 @@ const db = {
   async getCustomers() {
     const fs = _firestore();
     if (fs) {
-      const snap = await fs.collection("customers").orderBy("savedAt", "desc").get();
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      try {
+        const snap = await fs.collection("customers").orderBy("savedAt", "desc").get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch (e) { console.warn("Firestore getCustomers failed, using localStorage", e); }
     }
     // localStorage fallback
     const regular = _lsGet(STORAGE_KEYS.users, []);
@@ -96,8 +99,10 @@ const db = {
   async addCustomer(data) {
     const fs = _firestore();
     if (fs) {
-      const ref = await fs.collection("customers").add({ ...data, savedAt: new Date().toISOString() });
-      return ref.id;
+      try {
+        const ref = await fs.collection("customers").add({ ...data, savedAt: new Date().toISOString() });
+        return ref.id;
+      } catch (e) { console.warn("Firestore addCustomer failed, using localStorage", e); }
     }
     const regular = _lsGet(STORAGE_KEYS.users, []);
     regular.push(data);
@@ -112,8 +117,10 @@ const db = {
   async getOrders() {
     const fs = _firestore();
     if (fs) {
-      const snap = await fs.collection("orders").orderBy("createdAt", "desc").limit(200).get();
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      try {
+        const snap = await fs.collection("orders").orderBy("createdAt", "desc").limit(200).get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch (e) { console.warn("Firestore getOrders failed, using localStorage", e); }
     }
     return _lsGet(STORAGE_KEYS.orders, []);
   },
@@ -122,8 +129,10 @@ const db = {
     const data = { ...order, createdAt: new Date().toISOString() };
     const fs = _firestore();
     if (fs) {
-      const ref = await fs.collection("orders").add(data);
-      return ref.id;
+      try {
+        const ref = await fs.collection("orders").add(data);
+        return ref.id;
+      } catch (e) { console.warn("Firestore addOrder failed, using localStorage", e); }
     }
     const orders = _lsGet(STORAGE_KEYS.orders, []);
     orders.unshift(data);
@@ -135,8 +144,10 @@ const db = {
   async getSpecials() {
     const fs = _firestore();
     if (fs) {
-      const snap = await fs.collection("specials").get();
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      try {
+        const snap = await fs.collection("specials").get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch (e) { console.warn("Firestore getSpecials failed, using localStorage", e); }
     }
     return _lsGet(STORAGE_KEYS.specials, []);
   },
@@ -144,16 +155,16 @@ const db = {
   async saveSpecials(list) {
     const fs = _firestore();
     if (fs) {
-      const batch = fs.batch();
-      const existing = await fs.collection("specials").get();
-      existing.docs.forEach(d => batch.delete(d.ref));
-      list.forEach(item => batch.set(fs.collection("specials").doc(), item));
-      await batch.commit();
-      return;
+      try {
+        const batch = fs.batch();
+        const existing = await fs.collection("specials").get();
+        existing.docs.forEach(d => batch.delete(d.ref));
+        list.forEach(item => batch.set(fs.collection("specials").doc(), item));
+        await batch.commit();
+      } catch (e) { console.warn("Firestore saveSpecials failed, using localStorage", e); }
     }
+    // Always save to localStorage + notify listeners as fallback cache
     _lsSet(STORAGE_KEYS.specials, list);
-    // localStorage has no real-time listeners, so notify any in-tab
-    // subscribers (e.g. an open index.html tab) so an admin edit still refreshes.
     _notifySpecialsListeners();
   },
 
@@ -165,10 +176,12 @@ const db = {
   async getMenu() {
     const fs = _firestore();
     if (fs) {
-      const snap = await fs.collection("menu").get();
-      const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (data.length > 0) return data;
-      // Firestore empty → seed once from the shared default menu.
+      try {
+        const snap = await fs.collection("menu").get();
+        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        if (data.length > 0) return data;
+      } catch (e) { console.warn("Firestore getMenu failed, using localStorage", e); }
+      // Firestore empty/unreachable → seed once from the shared default menu.
       const defaults = (window.MENU_DATA || []);
       if (defaults.length) {
         try { await db.saveMenu(defaults.map(d => ({ ...d }))); }
@@ -182,16 +195,16 @@ const db = {
   async saveMenu(list) {
     const fs = _firestore();
     if (fs) {
-      const batch = fs.batch();
-      const existing = await fs.collection("menu").get();
-      existing.docs.forEach(d => batch.delete(d.ref));
-      list.forEach(item => batch.set(fs.collection("menu").doc(), item));
-      await batch.commit();
-      return;
+      try {
+        const batch = fs.batch();
+        const existing = await fs.collection("menu").get();
+        existing.docs.forEach(d => batch.delete(d.ref));
+        list.forEach(item => batch.set(fs.collection("menu").doc(), item));
+        await batch.commit();
+      } catch (e) { console.warn("Firestore saveMenu failed, using localStorage", e); }
     }
+    // Always save to localStorage + notify listeners as fallback cache
     _lsSet(STORAGE_KEYS.menu, list);
-    // localStorage has no real-time listeners, so notify any in-tab subscribers
-    // (e.g. an open menu.html tab) so a single-device admin edit still refreshes.
     _notifyMenuListeners();
   },
 
@@ -203,10 +216,16 @@ const db = {
   onMenuChange(callback) {
     const fs = _firestore();
     if (fs) {
-      return fs.collection("menu").onSnapshot(
-        () => { db.getMenu().then(callback).catch(() => {}); },
-        (err) => { console.warn("menu onSnapshot failed", err); }
+      let unsubscribed = false;
+      const unsub = fs.collection("menu").onSnapshot(
+        () => { if (!unsubscribed) db.getMenu().then(callback).catch(() => {}); },
+        (err) => {
+          console.warn("menu onSnapshot failed, falling back to in-tab", err);
+          unsubscribed = true;
+          _menuListeners.add(callback);
+        }
       );
+      return () => { unsubscribed = true; unsub(); _menuListeners.delete(callback); };
     }
     _menuListeners.add(callback);
     return () => _menuListeners.delete(callback);
@@ -220,10 +239,16 @@ const db = {
   onSpecialsChange(callback) {
     const fs = _firestore();
     if (fs) {
-      return fs.collection("specials").onSnapshot(
-        () => { db.getSpecials().then(callback).catch(() => {}); },
-        (err) => { console.warn("specials onSnapshot failed", err); }
+      let unsubscribed = false;
+      const unsub = fs.collection("specials").onSnapshot(
+        () => { if (!unsubscribed) db.getSpecials().then(callback).catch(() => {}); },
+        (err) => {
+          console.warn("specials onSnapshot failed, falling back to in-tab", err);
+          unsubscribed = true;
+          _specialsListeners.add(callback);
+        }
       );
+      return () => { unsubscribed = true; unsub(); _specialsListeners.delete(callback); };
     }
     _specialsListeners.add(callback);
     return () => _specialsListeners.delete(callback);
@@ -246,8 +271,10 @@ const db = {
   async setSetting(key, value) {
     const fs = _firestore();
     if (fs) {
-      await fs.collection("settings").doc(key).set({ value }, { merge: true });
-      return;
+      try {
+        await fs.collection("settings").doc(key).set({ value }, { merge: true });
+        return;
+      } catch (e) { console.warn("Firestore setSetting failed, using localStorage", e); }
     }
     _lsSet(STORAGE_KEYS[key], value);
   },
@@ -291,3 +318,4 @@ const db = {
 };
 
 /* Make db available to admin.js (which runs after db.js in the <script> order) */
+window.db = db;
