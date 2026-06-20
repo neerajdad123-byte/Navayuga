@@ -21,6 +21,15 @@ async function verifyPassword(pw) { return await db.verifyPassword(pw); }
 async function setPassword(pw)    { return await db.setPassword(pw); }
 async function getOrders()   { return await db.getOrders(); }
 
+function esc(s) { return String(s == null ? "" : s).replace(/"/g, '""'); }
+function downloadCSV(content, filename) {
+  const blob = new Blob(["\uFEFF" + content], { type: "text/csv;charset=utf-8;" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
 /* One-time seed: if the backend menu collection is empty AND we haven't
    seeded this browser yet, push the full default menu (with categories) so
    the admin list matches what customers see on menu.html. Safe to re-run —
@@ -177,6 +186,33 @@ async function renderOrders() {
 
 document.getElementById("btnRefreshOrders").addEventListener("click", () => { renderOrders(); renderAll(); });
 
+document.getElementById("btnExportOrdersCSV").addEventListener("click", async () => {
+  const orders = await getOrders();
+  if (!orders.length) { alert("No orders."); return; }
+  const now = new Date().toISOString().slice(0, 10);
+  const rows = [];
+  rows.push("Order #,Date,Customer,WhatsApp,Items,Qty,Total (₹)");
+  orders.forEach((o, i) => {
+    const date = o.createdAt ? new Date(o.createdAt).toLocaleString("en-IN") : (o.time || "");
+    const itemsText = (o.items || []).map(it => it.name).join("; ");
+    const qty = (o.items || []).reduce((s, it) => s + (it.qty || 1), 0);
+    rows.push(`${orders.length - i},"${date}","${esc(o.customerName)}","${esc(o.customerWA)}","${esc(itemsText)}",${qty},${o.total || 0}`);
+  });
+  downloadCSV(rows.join("\n"), "luckys_orders_" + now + ".csv");
+});
+
+document.getElementById("btnExportSpecialsCSV").addEventListener("click", async () => {
+  const specials = await getSpecials();
+  if (!specials.length) { alert("No specials."); return; }
+  const now = new Date().toISOString().slice(0, 10);
+  const rows = [];
+  rows.push("Name,Description,Price (₹),Category,Active,Created,Updated");
+  specials.forEach(s => {
+    rows.push(`"${esc(s.name)}","${esc(s.desc)}",${s.price || 0},"${esc(s.category)}",${s.active ? "Yes" : "No"},"${s.createdAt ? new Date(s.createdAt).toLocaleString("en-IN") : ""}","${s.updatedAt ? new Date(s.updatedAt).toLocaleString("en-IN") : ""}"`);
+  });
+  downloadCSV(rows.join("\n"), "luckys_specials_" + now + ".csv");
+});
+
 /* ═══ MENU ═══ */
 async function renderMenu() {
   const menu = await getMenu();
@@ -253,14 +289,17 @@ editForm.addEventListener("submit", async (e) => {
     const specials = await getSpecials();
     const imgUrl = pendingSpecialFileDataUrl || editImg.value.trim() || "images/placeholder.svg";
     const category = editCategory ? editCategory.value.trim() : "";
-    const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, active: true, category };
+    const nowISO = new Date().toISOString();
+    const item = { name: editName.value.trim(), desc: editDesc.value.trim(), price: parseInt(editPrice.value) || 0, img: imgUrl, active: true, category, updatedAt: nowISO };
     if (!item.name || !item.price) return;
     if (idxVal === "special_new") {
+      item.createdAt = nowISO;
       specials.push(item);
     } else {
       const i = parseInt(idxVal.replace("special_", ""));
       if (Number.isNaN(i) || !specials[i]) return;
       item.active = specials[i].active; // preserve existing active flag
+      item.createdAt = specials[i].createdAt || nowISO;
       specials[i] = item;
     }
     await saveSpecials(specials);
@@ -319,13 +358,19 @@ async function renderSpecial() {
     img:   (s && s.img)   ? String(s.img)   : "images/placeholder.svg",
     active: !!(s && s.active),
     category: (s && s.category) ? String(s.category) : "",
+    createdAt: (s && s.createdAt) ? String(s.createdAt) : "",
+    updatedAt: (s && s.updatedAt) ? String(s.updatedAt) : "",
   }));
-  specialList.innerHTML = specials.map((item, i) => `
+  specialList.innerHTML = specials.map((item, i) => {
+    const created = item.createdAt ? new Date(item.createdAt).toLocaleString("en-IN") : "";
+    const updated = item.updatedAt ? new Date(item.updatedAt).toLocaleString("en-IN") : "";
+    const timeInfo = created ? (created === updated ? `<span style="font-size:0.68rem;color:var(--cream-dim)">Created: ${created}</span>` : `<span style="font-size:0.68rem;color:var(--cream-dim)">Created: ${created} · Updated: ${updated}</span>`) : "";
+    return `
     <div class="admin-list__item">
       <img src="${item.img}" alt="${item.name}" onerror="this.src='images/placeholder.svg'" />
       <div class="admin-list__item-info">
         <div class="admin-list__item-name">${item.name} ${item.active ? '<span class="admin-badge" style="background:var(--green);margin-left:0.4rem">Active</span>' : '<span class="admin-badge" style="background:var(--cream-dim);margin-left:0.4rem">Inactive</span>'}</div>
-        <div class="admin-list__item-desc">${item.desc}</div>
+        <div class="admin-list__item-desc">${item.desc}${timeInfo ? '<br/>' + timeInfo : ''}</div>
       </div>
       <div class="admin-list__item-price">₹ ${item.price}</div>
       <div class="admin-list__item-actions">
@@ -333,7 +378,7 @@ async function renderSpecial() {
         <button class="admin-btn admin-btn--edit" data-sedit="${i}">Edit</button>
         <button class="admin-btn admin-btn--del" data-sdel="${i}">Delete</button>
       </div>
-    </div>`).join("");
+    </div>`}).join("");
 
   specialList.querySelectorAll("[data-stoggle]").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -472,10 +517,24 @@ async function renderUsers() {
 document.getElementById("btnExportCSV").addEventListener("click", async () => {
   const users = await getUsers();
   if (!users.length) { alert("No customers."); return; }
-  let csv = "Name,WhatsApp,Birthday,Submitted\n";
-  users.forEach(u => csv += `"${(u.name||"").replace(/"/g,'""')}","${(u.whatsapp||"").replace(/"/g,'""')}","${u.birthday||""}","${(u.time||"").replace(/"/g,'""')}"\n`);
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "luckys_customers_" + new Date().toISOString().slice(0,10) + ".csv"; a.click();
+  const now = new Date().toISOString().slice(0, 10);
+  const csvRows = [];
+  csvRows.push("Name,WhatsApp,Birthday,Next Birthday,Days Until,Submitted On,Saved On,Customer ID");
+  const today = new Date();
+  const y = today.getFullYear();
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  users.forEach(u => {
+    let nextBD = "", daysUntil = "";
+    if (u.birthday) {
+      const p = u.birthday.split("-");
+      let d = new Date(y, parseInt(p[1]) - 1, parseInt(p[2]));
+      if (d < today) d = new Date(y + 1, parseInt(p[1]) - 1, parseInt(p[2]));
+      nextBD = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+      daysUntil = Math.ceil((d - today) / 86400000);
+    }
+    csvRows.push(`"${esc(u.name)}","${esc(u.whatsapp)}","${esc(u.birthday)}","${nextBD}","${daysUntil}","${esc(u.time)}","${esc(u.savedAt || "")}","${esc(u.id || "")}"`);
+  });
+  downloadCSV(csvRows.join("\n"), "luckys_customers_" + now + ".csv");
 });
 
 /* ═══ PASSWORD ═══ */

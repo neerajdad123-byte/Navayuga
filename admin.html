@@ -47,7 +47,10 @@
     <section class="admin-panel active" id="tab-orders">
       <div class="admin-panel__head">
         <h3>Recent Orders</h3>
-        <button class="admin-btn admin-btn--add" id="btnRefreshOrders">↻ Refresh</button>
+        <div style="display:flex;gap:0.5rem">
+          <button class="admin-btn admin-btn--add" id="btnExportOrdersCSV">📥 Export CSV</button>
+          <button class="admin-btn admin-btn--add" id="btnRefreshOrders">↻ Refresh</button>
+        </div>
       </div>
       <p style="color:var(--cream-dim);font-size:0.78rem;margin-bottom:1.2rem">Orders placed via the cart (WhatsApp orders). Newest first.</p>
       <div class="admin-list" id="ordersList"></div>
@@ -66,7 +69,10 @@
     <section class="admin-panel" id="tab-special">
       <div class="admin-panel__head">
         <h3>Special Items</h3>
-        <button class="admin-btn admin-btn--add" id="btnAddSpecial">+ Add Special</button>
+        <div style="display:flex;gap:0.5rem">
+          <button class="admin-btn admin-btn--add" id="btnExportSpecialsCSV">📥 Export CSV</button>
+          <button class="admin-btn admin-btn--add" id="btnAddSpecial">+ Add Special</button>
+        </div>
       </div>
       <p style="color:var(--cream-dim);font-size:0.78rem;margin-bottom:1.2rem">Active specials appear on the homepage as featured items.</p>
       <div class="admin-list" id="specialList"></div>
